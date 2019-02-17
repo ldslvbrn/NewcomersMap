@@ -3,6 +3,7 @@ package uk.ac.tees.newcomersmap;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import uk.ac.tees.newcomersmap.ui.MapListFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
                 .findNavController(this, R.id.nav_host_fragment);
 
         if(mGoogleSingInAccount != null) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(
+                    MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT, mGoogleSingInAccount);
             // Navigate to the user's maps list
-            navController.navigate(R.id.mapListFragment);
+            navController.navigate(R.id.mapListFragment, bundle);
         }
         else
         {
