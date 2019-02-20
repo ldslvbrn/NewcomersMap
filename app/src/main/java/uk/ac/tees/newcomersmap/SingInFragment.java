@@ -30,24 +30,31 @@ import uk.ac.tees.newcomersmap.R;
  */
 public class SingInFragment extends Fragment {
 
-    public static final int GOOGLE_SIGN_IN_REQUEST = 1;
     public static final String TAG = "SingInFragment";
-
+    public static final int GOOGLE_SIGN_IN_REQUEST = 1;
 
     private GoogleSignInClient mGoogleSignInClient;
 
-    public SingInFragment() { }
 
+    public SingInFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: called");
+        
         // Inflate the layout for this fragment and instantiate the View
         View view = inflater.inflate(R.layout.fragment_sing_in, container, false);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                // Value default_web_client_id is generated at compile time
+                // from google-services.json file
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -64,7 +71,6 @@ public class SingInFragment extends Fragment {
                 startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST);
             }
         });
-
 
         // Return view
         return view;
@@ -90,7 +96,6 @@ public class SingInFragment extends Fragment {
             bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT,account);
             Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
                     .navigate(R.id.mapListFragment, bundle);
-
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

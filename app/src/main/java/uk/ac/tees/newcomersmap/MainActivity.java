@@ -1,8 +1,9 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.newcomersmap.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import uk.ac.tees.newcomersmap.R;
 import uk.ac.tees.newcomersmap.ui.MapListFragment;
 
 import android.os.Bundle;
@@ -32,16 +33,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Check for existing Google Sign In mGoogleSingInAccount, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount mGoogleSingInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount currentUser = GoogleSignIn.getLastSignedInAccount(this);
 
         // Get the Navigation Controller instance
         NavController navController = Navigation
                 .findNavController(this, R.id.nav_host_fragment);
 
-        if(mGoogleSingInAccount != null) {
+        if(currentUser != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(
-                    MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT, mGoogleSingInAccount);
+                    MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT, currentUser);
             // Navigate to the user's maps list
             navController.navigate(R.id.mapListFragment, bundle);
         }
