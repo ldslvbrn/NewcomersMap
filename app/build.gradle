@@ -20,18 +20,36 @@ android {
 }
 
 dependencies {
-    // Google Play services Auth split
-    implementation 'com.google.android.gms:play-services-auth:16.0.0'
-    // Google Api Client library and Android extension
-    implementation 'com.google.api-client:google-api-client:1.22.0'
-    implementation 'com.google.api-client:google-api-client-android:1.22.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+    // Google Api Client library and Android extension
+    implementation ('com.google.api-client:google-api-client:1.22.0') {
+        exclude group: 'com.google.guava'
+    }
+    implementation ('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'com.google.guava'
+    }
+
+    // Google Firebase Firestore dependencies
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
+    implementation 'com.google.firebase:firebase-firestore:18.0.1'
+    implementation 'com.google.firebase:firebase-measurement-connector-impl:17.0.5'
+
+    // AndroidX library packages
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta01'
+
+    // Android Architecture Components libraries
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+
+    // Android Support libraries
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
 }

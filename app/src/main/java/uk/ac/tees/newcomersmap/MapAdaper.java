@@ -10,7 +10,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import uk.ac.tees.newcomersmap.R;
-import uk.ac.tees.newcomersmap.data.NewcomerMap;
+import uk.ac.tees.newcomersmap.NewcomerMap;
 
 public class MapAdaper extends RecyclerView.Adapter<MapAdaper.MapHolder> {
 
@@ -40,9 +40,9 @@ public class MapAdaper extends RecyclerView.Adapter<MapAdaper.MapHolder> {
 
         public MapHolder(@NonNull View itemView) {
             super(itemView);
-            textViewTitle = itemView.findViewById(R.id.textView_title);
-            textViewLocation = itemView.findViewById(R.id.textView_location);
-            textViewMarkers = itemView.findViewById(R.id.textView_markers);
+//            textViewTitle = itemView.findViewById(R.id.textView_title);
+//            textViewLocation = itemView.findViewById(R.id.textView_location);
+//            textViewMarkers = itemView.findViewById(R.id.textView_markers);
             // TODO: Use Geolocator to generate town
         }
     }

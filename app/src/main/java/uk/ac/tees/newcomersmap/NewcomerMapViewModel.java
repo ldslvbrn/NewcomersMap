@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap.data;
+package uk.ac.tees.newcomersmap;
 
 import android.app.Application;
 import android.os.AsyncTask;
@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import uk.ac.tees.newcomersmap.NewcomerMap;
 
 public class NewcomerMapViewModel extends AndroidViewModel {
 
@@ -79,7 +80,7 @@ public class NewcomerMapViewModel extends AndroidViewModel {
      */
     private void readData() {
         if (AUTHENTICATED) {
-            new LoadMapsAsyncTask().execute(mUserDataReference);
+
 
         }
 
@@ -184,44 +185,6 @@ public class NewcomerMapViewModel extends AndroidViewModel {
 
     public static boolean isAuthenticated() {
         return AUTHENTICATED;
-    }
-
-    private static class LoadMapsAsyncTask extends AsyncTask<CollectionReference, Void, List<NewcomerMap>> {
-
-        private CollectionReference usersMapsDataRef;
-        private List<NewcomerMap> resultMaps;
-
-        @Override
-        protected List<NewcomerMap> doInBackground(CollectionReference... collectionReferences) {
-            usersMapsDataRef = collectionReferences[0];
-            usersMapsDataRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "readData: onComplete: Services reached successfully");
-                        resultMaps = new ArrayList<>();
-                        if (!task.getResult().isEmpty()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                NewcomerMap map = document.toObject(NewcomerMap.class);
-                                map.setDocumentId(document.getId());
-                                resultMaps.add(map);
-                            }
-                        }
-                    }
-                    else {
-                        Log.d(TAG, "readData: onFailure: " + e.getMessage());
-                    }
-                }
-            });
-            return resultMaps;
-        }
-
-        @Override
-        protected void onPostExecute(List<NewcomerMap> maps) {
-            super.onPostExecute(maps);
-
-
-        }
     }
 
 }

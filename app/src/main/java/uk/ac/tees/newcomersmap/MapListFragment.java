@@ -14,9 +14,10 @@ import java.util.List;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import uk.ac.tees.newcomersmap.NewcomerMap;
 import uk.ac.tees.newcomersmap.R;
-import uk.ac.tees.newcomersmap.data.NewcomerMap;
-import uk.ac.tees.newcomersmap.data.NewcomerMapViewModel;
+import uk.ac.tees.newcomersmap.NewcomerMap;
+import uk.ac.tees.newcomersmap.NewcomerMapViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +50,7 @@ public class MapListFragment extends Fragment {
                 .getParcelable(EXTRA_GOOGLE_SING_IN_ACCOUNT);
         // Authenticate to remote services
         newcomerMapViewModel.authenticateToFirebase(mGoogleSignInAccount);
-        newcomerMapViewModel.loadData();
+        // newcomerMapViewModel.loadData();
         // Observe ViewModel
         newcomerMapViewModel.getAllMaps().observe(this, new Observer<List<NewcomerMap>>() {
             @Override
