@@ -2,13 +2,33 @@ package uk.ac.tees.newcomersmap;
 
 import com.google.firebase.firestore.Exclude;
 
+import java.util.List;
+
 public class NewcomerMap {
 
     private String documentId, title, description;
     private double longitude, latitude;
+    private List<UserMarker> markers;
 
     public NewcomerMap() {
         // No-args constructor required for Firebase Firestore db
+    }
+
+    public NewcomerMap(String documentId, String title, String description, double longitude, double latitude, List<UserMarker> markers) {
+        this.documentId = documentId;
+        this.title = title;
+        this.description = description;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.markers = markers;
+    }
+
+    public List<UserMarker> getMarkers() {
+        return markers;
+    }
+
+    public void setMarkers(List<UserMarker> markers) {
+        this.markers = markers;
     }
 
     public String getTitle() {

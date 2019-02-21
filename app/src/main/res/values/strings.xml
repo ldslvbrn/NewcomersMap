@@ -3,6 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="welcome">Welcome!</string>
+    <string name="welcome_word">Welcome!</string>
     <string name="please_log_in">Please, choose one of following options to sign in</string>
+    <string name="error_message">Sorry, we were unable to retrieve your data</string>
+    <string name="error_word">Error</string>
+    <string name="loading_your_maps">Loading your maps. . .</string>
+    <string name="markers">Markers:</string>
+    <string name="title">Title:</string>
+    <string name="location">Location:</string>
+
 </resources>
