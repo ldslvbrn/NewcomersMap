@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/titleScreenFragment">
+
+    <fragment
+        android:id="@+id/singInFragment"
+        android:name="uk.ac.tees.newcomersmap.ui.SingInFragment"
+        android:label="fragment_sing_in"
+        tools:layout="@layout/fragment_sing_in">
+        <action
+            android:id="@+id/action_singInFragment_to_mapListFragment"
+            app:destination="@id/mapListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/titleScreenFragment"
+        android:name="uk.ac.tees.newcomersmap.ui.TitleScreenFragment"
+        android:label="fragment_title_screen"
+        tools:layout="@layout/fragment_title_screen">
+        <action
+            android:id="@+id/action_titleScreenFragment_to_mapListFragment"
+            app:destination="@id/mapListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_titleScreenFragment_to_singInFragment"
+            app:destination="@id/singInFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="uk.ac.tees.newcomersmap.ErrorFragment"
+        android:label="fragment_error"
+        tools:layout="@layout/fragment_error" />
+
+    <fragment
+        android:id="@+id/mapListFragment"
+        android:name="uk.ac.tees.newcomersmap.ui.MapListFragment"
+        android:label="fragment_sing_in"
+        tools:layout="@layout/fragment_sing_in">
+        <action
+            android:id="@+id/action_mapListFragment_to_errorFragment"
+            app:destination="@id/errorFragment" />
+    </fragment>
 
 </navigation>

@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap.ui;
+package uk.ac.tees.newcomersmap;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,6 +14,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
+import static uk.ac.tees.newcomersmap.ui.MapListFragment.*;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
@@ -24,32 +26,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) { Log.d(TAG, "onCreate: Woohoo, I'm being called!!!"); }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        // Check for existing Google Sign In mGoogleSingInAccount, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount currentUser = GoogleSignIn.getLastSignedInAccount(this);
-
-        // Get the Navigation Controller instance
-        NavController navController = Navigation
-                .findNavController(this, R.id.nav_host_fragment);
-
-        if(currentUser != null) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(
-                    MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT, currentUser);
-            // Navigate to the user's maps list
-            navController.navigate(R.id.mapListFragment, bundle);
-        }
-        else
-        {
-            // Navigate to the login screen
-            navController.navigate(R.id.singInFragment);
+        // Navigate to the welcome screen if not no previous session is found
+        if (savedInstanceState != null) {
+            Navigation.findNavController(this, R.id.nav_host_fragment)
+                    .navigate(R.id.titleScreenFragment);
         }
     }
+
 }

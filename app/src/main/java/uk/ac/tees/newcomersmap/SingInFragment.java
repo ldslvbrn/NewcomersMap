@@ -32,6 +32,8 @@ public class SingInFragment extends Fragment {
 
     public static final String TAG = "SingInFragment";
     public static final int GOOGLE_SIGN_IN_REQUEST = 1;
+    public static final String EXTRA_GOOGLE_SING_IN_ACCOUNT =
+            "uk.ac.tees.newcomersmap.EXTRA_GOOGLE_SING_IN_ACCOUNT";
 
     private GoogleSignInClient mGoogleSignInClient;
 
@@ -54,7 +56,7 @@ public class SingInFragment extends Fragment {
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 // Value default_web_client_id is generated at compile time
                 // from google-services.json file
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(R.string.default_web_client_id)
                 .requestEmail()
                 .build();
 
@@ -93,7 +95,7 @@ public class SingInFragment extends Fragment {
 
             // Signed in successfully, show authenticated UI.
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT,account);
+            bundle.putParcelable(EXTRA_GOOGLE_SING_IN_ACCOUNT,account);
             Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
                     .navigate(R.id.mapListFragment, bundle);
 
