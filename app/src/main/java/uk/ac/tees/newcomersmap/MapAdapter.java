@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap.ui;
+package uk.ac.tees.newcomersmap;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +10,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import uk.ac.tees.newcomersmap.R;
-import uk.ac.tees.newcomersmap.NewcomerMap;
-import uk.ac.tees.newcomersmap.UserMarker;
 
-public class MapAdaper extends RecyclerView.Adapter<MapAdaper.MapHolder> {
+public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapHolder> {
 
     private List<NewcomerMap> maps = new ArrayList<>();
 

@@ -1,11 +1,8 @@
-package uk.ac.tees.newcomersmap.ui;
+package uk.ac.tees.newcomersmap;
 
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +17,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-import androidx.navigation.ActivityNavigator;
-import androidx.navigation.NavController;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import uk.ac.tees.newcomersmap.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,15 +27,7 @@ public class SingInFragment extends Fragment {
 
     public static final String TAG = "SingInFragment";
     public static final int GOOGLE_SIGN_IN_REQUEST = 1;
-    public static final String EXTRA_GOOGLE_SING_IN_ACCOUNT =
-            "uk.ac.tees.newcomersmap.EXTRA_GOOGLE_SING_IN_ACCOUNT";
-
     private GoogleSignInClient mGoogleSignInClient;
-
-
-    public SingInFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,13 +37,15 @@ public class SingInFragment extends Fragment {
         // Inflate the layout for this fragment and instantiate the View
         View view = inflater.inflate(R.layout.fragment_sing_in, container, false);
 
+        String token = getString(R.string.default_web_client_id);
+
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 // Value default_web_client_id is generated at compile time
                 // from google-services.json file
-                .requestIdToken(R.string.default_web_client_id)
+                .requestIdToken(token)
                 .requestEmail()
                 .build();
 
@@ -86,6 +75,9 @@ public class SingInFragment extends Fragment {
         if(requestCode == GOOGLE_SIGN_IN_REQUEST && resultCode == getActivity().RESULT_OK) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        } else {
+            Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
+                    .navigate(R.id.errorFragment);
         }
     }
 
@@ -95,9 +87,9 @@ public class SingInFragment extends Fragment {
 
             // Signed in successfully, show authenticated UI.
             Bundle bundle = new Bundle();
-            bundle.putParcelable(EXTRA_GOOGLE_SING_IN_ACCOUNT,account);
+            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT,account);
             Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
-                    .navigate(R.id.mapListFragment, bundle);
+                    .navigate(R.id.action_singInFragment_to_mapListFragment, bundle);
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

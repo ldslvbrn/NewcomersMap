@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -18,21 +19,26 @@ android {
         }
     }
 }
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Google Api Client library and Android extension
-    implementation ('com.google.api-client:google-api-client:1.22.0') {
+    implementation('com.google.api-client:google-api-client:1.22.0') {
         exclude group: 'com.google.guava'
     }
-    implementation ('com.google.api-client:google-api-client-android:1.22.0') {
+    implementation('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'com.google.guava'
+    }
+    implementation("com.google.android.gms:play-services-base:16.1.0") {
+        exclude group: 'com.google.guava'
+    }
+    implementation('com.google.gms:google-services:4.2.0') {
         exclude group: 'com.google.guava'
     }
 
     // Google Firebase Firestore dependencies
     implementation 'com.google.firebase:firebase-core:16.0.7'
-    implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-firestore:18.0.1'
     implementation 'com.google.firebase:firebase-measurement-connector-impl:17.0.5'
 
@@ -46,10 +52,11 @@ dependencies {
 
     // Android Architecture Components libraries
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
-    implementation "android.arch.lifecycle:extensions:1.1.1"
-    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01'
 
     // Android Support libraries
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-}
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
+} // apply plugin: 'com.google.gms.google-services'
+

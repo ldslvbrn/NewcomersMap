@@ -1,25 +1,14 @@
 package uk.ac.tees.newcomersmap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import uk.ac.tees.newcomersmap.R;
-import uk.ac.tees.newcomersmap.ui.MapListFragment;
-
 import android.os.Bundle;
-import android.util.Log;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.Navigation;
 
-import static uk.ac.tees.newcomersmap.ui.MapListFragment.*;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
