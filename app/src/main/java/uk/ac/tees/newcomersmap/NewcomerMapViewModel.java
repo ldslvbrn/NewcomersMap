@@ -36,7 +36,6 @@ public class NewcomerMapViewModel extends AndroidViewModel {
     private static final String NCMAP_KEY = "NCMap_Key";
 
     private boolean AUTHENTICATED;
-    private Application application;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private CollectionReference userDataReference;
@@ -47,11 +46,10 @@ public class NewcomerMapViewModel extends AndroidViewModel {
     public NewcomerMapViewModel(Application application) {
         super(application);
         // Assign variables
-        this.application = application;
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public void authenticateToFirebase(final GoogleSignInAccount account, final MapListFragment.OnServiceResultListener listener) {
+    public void authenticateToFirebase(final GoogleSignInAccount account, final OnServiceResultListener listener) {
 
 
         AuthCredential credential = GoogleAuthProvider.getCredential(account
@@ -81,7 +79,7 @@ public class NewcomerMapViewModel extends AndroidViewModel {
      * - Return empty list if connection attempt was successful but no data was found
      * - Return populated list if connection attempt was successful
      */
-    public void retrieveData(final MapListFragment.OnServiceResultListener onRetrieveDataResultListener) {
+    public void retrieveData(final OnServiceResultListener listener) {
         if (AUTHENTICATED) {
             userDataReference = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
                     .document(firebaseUser.getUid()).collection(USER_NCMAPS_COLLECTION);
@@ -101,17 +99,17 @@ public class NewcomerMapViewModel extends AndroidViewModel {
                         }
                         allMaps = new MutableLiveData<>();
                         allMaps.setValue(mapList);
-                        onRetrieveDataResultListener.OnResultCallback(true);
+                        listener.OnResultCallback(true);
                     } else {
                         Log.d(TAG, "readData: onFailure: Failed to reach online services");
-                        onRetrieveDataResultListener.OnResultCallback(false);
+                        listener.OnResultCallback(false);
                     }
                 }
             });
         }
     }
 
-    public void addMap(final NewcomerMap map) {
+    public void addMap(final NewcomerMap map, final OnServiceResultListener listener) {
         userDataReference.document().set(map)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -119,17 +117,17 @@ public class NewcomerMapViewModel extends AndroidViewModel {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "addMap: onComplete: Service reached successfully");
                             allMaps.getValue().add(map);
+                            listener.OnResultCallback(true);
                         } else {
                             Log.d(TAG, "addMap: onFailure: Failed to reach online services");
-                            Toast.makeText(application.getApplicationContext(),
-                                    "Failed to reach online services", Toast.LENGTH_SHORT);
+                            listener.OnResultCallback(false);
                         }
                     }
                 });
     }
 
-    public void updateMap(final NewcomerMap map) {
-        userDataReference.document().set(map, SetOptions.merge())
+    public void updateMap(final NewcomerMap map, final OnServiceResultListener listener) {
+        userDataReference.document(map.getDocumentId()).set(map, SetOptions.merge())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -137,28 +135,25 @@ public class NewcomerMapViewModel extends AndroidViewModel {
                             Log.d(TAG, "updateMap: onComplete: Service reached successfully");
                             int index = allMaps.getValue().indexOf(map);
                             allMaps.getValue().set(index, map);
+                            listener.OnResultCallback(true);
                         } else {
                             Log.d(TAG, "updateMap: onFailure: Failed to reach online services");
-                            Toast.makeText(application.getApplicationContext(),
-                                    "Failed to reach online services", Toast.LENGTH_SHORT);
+                            listener.OnResultCallback(false);
                         }
                     }
                 });
     }
 
-    public void deleteMap(final NewcomerMap map) {
+    public void deleteMap(final NewcomerMap map, OnServiceResultListener listener) {
         userDataReference.document(map.getDocumentId()).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "deleteMap: onComplete: Service reached successfully");
-                            int index = allMaps.getValue().indexOf(map);
                             allMaps.getValue().remove(map);
                         } else {
                             Log.d(TAG, "deleteMap: onFailure: Failed to reach online services");
-                            Toast.makeText(application.getApplicationContext(),
-                                    "Failed to reach online services", Toast.LENGTH_SHORT);
                         }
                     }
                 });
@@ -174,6 +169,10 @@ public class NewcomerMapViewModel extends AndroidViewModel {
 
     public boolean isAuthenticated() {
         return AUTHENTICATED;
+    }
+
+    public interface OnServiceResultListener {
+        void OnResultCallback(Boolean isSuccessful);
     }
 
 }

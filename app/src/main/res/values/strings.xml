@@ -5,11 +5,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_word">Welcome!</string>
     <string name="please_log_in">Please, login with your Google account.</string>
-    <string name="error_message">Sorry, we were unable to retrieve your data</string>
+    <string name="firestore_error_message">Sorry, we were unable to retrieve your data.</string>
+    <string name="permission_error_message">We need Internet access and your location permissions.\nPlease, turn the permissions in settings and restart the app.</string>
+    <string name="default_error_message">"Unregistered error"</string>
     <string name="error_word">Error</string>
     <string name="loading_your_maps">Loading your maps. . .</string>
     <string name="markers">Markers:</string>
     <string name="title">Title:</string>
     <string name="location">Location:</string>
+    <string name="edit_word">Edit</string>
+    <string name="delete_word">Delete</string>
 
 </resources>

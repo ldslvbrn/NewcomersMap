@@ -51,6 +51,14 @@
         <action
             android:id="@+id/action_mapListFragment_to_errorFragment"
             app:destination="@id/errorFragment" />
+        <action
+            android:id="@+id/action_mapListFragment_to_newcomerMapFragment"
+            app:destination="@id/newcomerMapFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/newcomerMapFragment"
+        android:name="uk.ac.tees.newcomersmap.NewcomerMapFragment"
+        android:label="fragment_newcomer_map"
+        tools:layout="@layout/fragment_newcomer_map" />
 
 </navigation>

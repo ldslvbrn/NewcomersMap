@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -53,5 +54,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:outlineAmbientShadowColor="@color/colorPrimary"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        tools:listitem="@layout/item_newcomer_map"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

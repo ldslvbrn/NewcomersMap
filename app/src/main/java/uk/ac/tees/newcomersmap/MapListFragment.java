@@ -1,6 +1,7 @@
 package uk.ac.tees.newcomersmap;
 
 
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,9 +32,10 @@ public class MapListFragment extends Fragment {
     private ConstraintLayout loadingView;
     private RecyclerView mapListView;
     private NewcomerMapViewModel newcomerMapViewModel;
+    private MapRecyclerAdapter adapter;
 
-    private final OnServiceResultListener onAuthenticateResultListener
-            = new OnServiceResultListener() {
+    private final NewcomerMapViewModel.OnServiceResultListener onAuthenticateResultListener
+            = new NewcomerMapViewModel.OnServiceResultListener() {
         @Override
         public void OnResultCallback(Boolean isSuccessful) {
             if (isSuccessful) {
@@ -41,33 +43,27 @@ public class MapListFragment extends Fragment {
             } else {
                 Log.d(TAG, "OnResultCallback: Unable to receive user data");
                 Toast.makeText(getActivity(),"Oops, something went wrong!",Toast.LENGTH_SHORT);
+                Bundle bundle = new Bundle();
+                bundle.putInt(ErrorFragment.EXTRA_ERROR_CODE,ErrorFragment.FIRESTORE_ERROR_CODE);
                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
-                        .navigate(R.id.action_mapListFragment_to_errorFragment);
+                        .navigate(R.id.action_mapListFragment_to_errorFragment, bundle);
             }
         }
     };
-    private final OnServiceResultListener onRetrieveDataResultListener
-            = new OnServiceResultListener() {
+    private final NewcomerMapViewModel.OnServiceResultListener onRetrieveDataResultListener
+            = new NewcomerMapViewModel.OnServiceResultListener() {
         @Override
         public void OnResultCallback(Boolean isSuccessful) {
             if (isSuccessful) {
                 loadingView.setVisibility(View.GONE);
                 mapListView.setVisibility(View.VISIBLE);
-                final MapAdapter adapter = new MapAdapter();
-
-                // Observe ViewModel
-                newcomerMapViewModel.getAllMaps().observe(getActivity(), new Observer<List<NewcomerMap>>() {
-                    @Override
-                    public void onChanged(List<NewcomerMap> maps) {
-                        // TODO: Shove something in here
-                         adapter.setMaps(maps);
-                    }
-                });
             } else {
                 Log.d(TAG, "OnResultCallback: Unable to receive user data");
                 Toast.makeText(getActivity(),"Oops, something went wrong!",Toast.LENGTH_SHORT);
+                Bundle bundle = new Bundle();
+                bundle.putInt(ErrorFragment.EXTRA_ERROR_CODE,ErrorFragment.FIRESTORE_ERROR_CODE);
                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
-                        .navigate(R.id.action_mapListFragment_to_errorFragment);
+                        .navigate(R.id.action_mapListFragment_to_errorFragment, bundle);
             }
         }
     };
@@ -82,6 +78,21 @@ public class MapListFragment extends Fragment {
         loadingView = view.findViewById(R.id.constraintLayout_loading_screen_holder);
         mapListView = view.findViewById(R.id.recycleListView_map_list);
 
+        adapter = new MapRecyclerAdapter(new Geocoder(getActivity()));
+        adapter.setOnItemClickListener(new MapRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(NewcomerMap map) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(NewcomerMapFragment.EXTRA_MAP_LIST_INDEX,
+                        newcomerMapViewModel.getAllMaps().getValue().indexOf(map));
+
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
+                        .navigate(R.id.action_mapListFragment_to_newcomerMapFragment);
+            }
+        });
+        mapListView.setAdapter(adapter);
+
+
         return view;
     }
 
@@ -92,16 +103,19 @@ public class MapListFragment extends Fragment {
         // Set-up ViewModel
         newcomerMapViewModel = ViewModelProviders.of(this)
                 .get(NewcomerMapViewModel.class);
+        // Observe ViewModel
+        newcomerMapViewModel.getAllMaps().observe(getActivity(), new Observer<List<NewcomerMap>>() {
+            @Override
+            public void onChanged(List<NewcomerMap> maps) {
+                adapter.setMaps(maps);
+            }
+        });
 
         // Get GoogleSignInAccount from previous fragments
         GoogleSignInAccount mGoogleSignInAccount = getArguments()
                 .getParcelable(EXTRA_GOOGLE_SING_IN_ACCOUNT);
         // Authenticate to remote services
         newcomerMapViewModel.authenticateToFirebase(mGoogleSignInAccount, onAuthenticateResultListener );
-    }
-
-    protected interface OnServiceResultListener {
-        void OnResultCallback(Boolean isSuccessful);
     }
 
 }

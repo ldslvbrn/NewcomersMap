@@ -1,20 +1,20 @@
 package uk.ac.tees.newcomersmap;
 
 import com.google.firebase.firestore.Exclude;
+import com.google.firebase.firestore.GeoPoint;
 
 public class UserMarker {
     private String documentId, title;
-    private long longitude, latitude;
+    private GeoPoint location;
 
     public UserMarker() {
         // No-args constructor required for Firebase Firestore db
     }
 
-    public UserMarker(String documentId, String title, long longitude, long latitude) {
+    public UserMarker(String documentId, String title, GeoPoint location) {
         this.documentId = documentId;
         this.title = title;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.location = location;
     }
 
     public String getDocumentId() {
@@ -34,19 +34,11 @@ public class UserMarker {
         this.title = title;
     }
 
-    public long getLongitude() {
-        return longitude;
+    public GeoPoint getLocation() {
+        return location;
     }
 
-    public void setLongitude(long longitude) {
-        this.longitude = longitude;
-    }
-
-    public long getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(long latitude) {
-        this.latitude = latitude;
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
 }

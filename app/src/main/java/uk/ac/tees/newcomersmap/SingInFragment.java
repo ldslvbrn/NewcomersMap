@@ -37,7 +37,7 @@ public class SingInFragment extends Fragment {
         // Inflate the layout for this fragment and instantiate the View
         View view = inflater.inflate(R.layout.fragment_sing_in, container, false);
 
-        String token = getString(R.string.default_web_client_id);
+        String clientId = getString(R.string.default_web_client_id);
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN
@@ -45,7 +45,7 @@ public class SingInFragment extends Fragment {
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 // Value default_web_client_id is generated at compile time
                 // from google-services.json file
-                .requestIdToken(token)
+                .requestIdToken(clientId)
                 .requestEmail()
                 .build();
 
