@@ -47,6 +47,7 @@ public class NewcomerMapViewModel extends AndroidViewModel {
         super(application);
         // Assign variables
         firebaseAuth = FirebaseAuth.getInstance();
+        this.allMaps = new MutableLiveData<>();
     }
 
     public void authenticateToFirebase(final GoogleSignInAccount account, final OnServiceResultListener listener) {
@@ -97,7 +98,6 @@ public class NewcomerMapViewModel extends AndroidViewModel {
                                 mapList.add(map);
                             }
                         }
-                        allMaps = new MutableLiveData<>();
                         allMaps.setValue(mapList);
                         listener.OnResultCallback(true);
                     } else {

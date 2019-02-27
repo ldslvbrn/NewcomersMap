@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom|center"
         android:layout_margin="16.0dip"
+        android:visibility="invisible"
         android:clickable="true"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_white"
         app:backgroundTint="@color/colorPrimary" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

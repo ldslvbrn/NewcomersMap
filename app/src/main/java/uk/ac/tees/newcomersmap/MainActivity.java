@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import androidx.annotation.NonNull;
@@ -24,15 +25,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Navigate to the welcome screen if not no previous session is found
-        if (savedInstanceState != null) {
 
-            Navigation.findNavController(this, R.id.nav_host_fragment)
-                    .navigate(R.id.titleScreenFragment);
-        } else {
-            // Location and Internet access permission check
-            checkPermissions();
-        }
+        // Location and Internet access permission check
+        checkPermissions();
     }
 
     @Override
@@ -52,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
                                     .navigate(R.id.errorFragment, bundle);
                         }
                     }
+                    Navigation.findNavController(this, R.id.nav_host_fragment)
+                            .navigate(R.id.titleScreenFragment);
                 }
                 break;
 
@@ -60,19 +57,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkPermissions() {
+    protected void checkPermissions() {
+        ArrayList<String> requestPermissions = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
-                        != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted; Request permissions
-            requestPermissions(new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.INTERNET},
-                    ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions.add(Manifest.permission.INTERNET);
+        }
+
+        if (!requestPermissions.isEmpty()) {
+            requestPermissions(requestPermissions.toArray(
+                    new String[requestPermissions.size()]), ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+        } else {
+            Navigation.findNavController(this, R.id.nav_host_fragment)
+                    .navigate(R.id.titleScreenFragment);
         }
     }
 }

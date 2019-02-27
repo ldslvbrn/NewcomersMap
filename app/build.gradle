@@ -38,30 +38,34 @@ dependencies {
 
     // Google Maps API
     implementation "com.google.android.gms:play-services-location:16.0.0"
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
 
     // Google Firebase Firestore dependencies
     implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.google.firebase:firebase-firestore:18.0.1'
+    implementation 'com.google.firebase:firebase-firestore:18.1.0'
     implementation 'com.google.firebase:firebase-measurement-connector-impl:17.0.5'
 
     // AndroidX library packages
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
+
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
     testImplementation 'junit:junit:4.12'
 
     // Android Architecture Components libraries
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0-beta01'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
 
-    // Android Support libraries
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    // Google Material libraries
     implementation 'com.google.android.material:material:1.1.0-alpha03'
-    implementation 'com.google.android.gms:play-services-maps:16.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
 } // apply plugin: 'com.google.gms.google-services'
 

@@ -59,6 +59,13 @@
         android:id="@+id/newcomerMapFragment"
         android:name="uk.ac.tees.newcomersmap.NewcomerMapFragment"
         android:label="fragment_newcomer_map"
-        tools:layout="@layout/fragment_newcomer_map" />
+        tools:layout="@layout/fragment_newcomer_map" >
+        <action
+            android:id="@+id/action_newcomerMapFragment_to_mapListFragment"
+            app:destination="@id/mapListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

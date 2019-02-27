@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MarkerRecyclerAdapter extends RecyclerView.Adapter<MarkerRecyclerAdapter.MarkHolder> {
@@ -20,6 +21,10 @@ public class MarkerRecyclerAdapter extends RecyclerView.Adapter<MarkerRecyclerAd
     private List<UserMarker> markers = new ArrayList<>();
     private Geocoder geocoder;
     private OnButtonClickListener onEditPressedListener, onDeletePressedListener;
+    private OnItemClickListener onItemClickListener;
+    private Integer selectedPosition = RecyclerView.NO_POSITION;
+    // Custom select
+    // https://stackoverflow.com/questions/27194044/how-to-properly-highlight-selected-item-on-recyclerview
 
     public MarkerRecyclerAdapter(Geocoder geocoder) {
         super();
@@ -37,6 +42,9 @@ public class MarkerRecyclerAdapter extends RecyclerView.Adapter<MarkerRecyclerAd
     @Override
     public void onBindViewHolder(@NonNull MarkHolder holder, int position) {
         UserMarker currentMarker = markers.get(position);
+        holder.itemView.setBackgroundResource(selectedPosition == position ?
+                R.drawable.item_border_selected : R.drawable.item_border);
+
         holder.textViewTitle.setText(currentMarker.getTitle());
 
         // Use Geocoder and reverse-geolocate nearest address
@@ -73,14 +81,18 @@ public class MarkerRecyclerAdapter extends RecyclerView.Adapter<MarkerRecyclerAd
         this.onDeletePressedListener = onDeletePressedListener;
     }
 
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     class MarkHolder extends RecyclerView.ViewHolder {
 
         private TextView textViewTitle;
         private TextView textViewLocation;
         private Button buttonEdit;
-        private Button buttonDelete;
+        private AppCompatImageButton buttonDelete;
 
-        public MarkHolder(@NonNull View itemView) {
+        public MarkHolder(@NonNull final View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.textView_marker_title);
             textViewLocation = itemView.findViewById(R.id.textView_marker_location);
@@ -94,7 +106,7 @@ public class MarkerRecyclerAdapter extends RecyclerView.Adapter<MarkerRecyclerAd
                     }
                 }
             });
-            buttonDelete = itemView.findViewById(R.id.button_edit_marker);
+            buttonDelete = itemView.findViewById(R.id.button_delete_marker);
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -104,7 +116,23 @@ public class MarkerRecyclerAdapter extends RecyclerView.Adapter<MarkerRecyclerAd
                     }
                 }
             });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (onItemClickListener != null && position != RecyclerView.NO_POSITION) {
+                        notifyItemChanged(selectedPosition);
+                        selectedPosition = getAdapterPosition();
+                        notifyItemChanged(selectedPosition);
+                        onItemClickListener.onItemClick(markers.get(position));
+                    }
+                }
+            });
         }
+    }
+
+    protected interface OnItemClickListener {
+        void onItemClick(UserMarker marker);
     }
 
     protected interface OnButtonClickListener {

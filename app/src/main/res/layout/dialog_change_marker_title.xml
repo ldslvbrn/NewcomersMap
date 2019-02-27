@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Base.Theme.AppCompat.Dialog.FixedSize"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+
+    <EditText
+        android:id="@+id/edit_marker_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/map_title_hint" />
+
+</RelativeLayout>
