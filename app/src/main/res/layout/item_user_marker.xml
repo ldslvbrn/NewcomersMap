@@ -22,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="~marker title~" />
+        tools:text="~marker title~"
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/textView_marker_location"
@@ -35,28 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_marker_title"
-        tools:text="~location~" />
-
-    <Button
-        android:id="@+id/button_edit_marker"
-        android:layout_width="70dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        android:pointerIcon="wait"
-        android:text="@string/edit_word"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/button_delete_marker"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_edit_marker"
-        app:srcCompat="@drawable/ic_close_black" />
+        tools:text="~location~"
+        android:singleLine="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -25,18 +26,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.WeakHashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,18 +46,17 @@ public class NewcomerMapFragment extends Fragment {
     private static int DEFAULT_ZOOM_LEVEL = 11;
 
     // View variables
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
     private MapView mMapView;
-    private GoogleMap gMap;
-    private RecyclerView recyclerView;
-    private MarkerRecyclerAdapter adapter;
+    private UserMarkerListAdapter mMarkerListAdapter;
+     private ListView mListView;
 
     // Utils variables
-    private Geocoder geocoder;
-    private FusedLocationProviderClient fusedLocationClient;
+    private GoogleMap mGoogleMap;
+    private FusedLocationProviderClient mFusedLocationClient;
     private NewcomerMapViewModel viewModel;
     private NewcomerMap newcomerMap;
-    private WeakHashMap<UserMarker, Marker> markerHashMap = new WeakHashMap<>();
+    private WeakHashMap<UserMarker, Marker> mMarkerHashMap = new WeakHashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,56 +64,53 @@ public class NewcomerMapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_newcomer_map, container, false);
 
-        // Set-up Toolbar
-        toolbar = view.findViewById(R.id.toolbar_newcomer_map);
-        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
-        toolbar.setTitle("");
+        if(savedInstanceState == null) {
+            // Acquire ViewModel
+            viewModel = ViewModelProviders.of(this)
+                    .get(NewcomerMapViewModel.class);
 
-        // Set-up ViewModel
-        viewModel = ViewModelProviders.of(this)
-                .get(NewcomerMapViewModel.class);
+            // Set-up ListView
+            mListView = view.findViewById(R.id.ListView_marker_list);
 
-        // Get MapView
-        mMapView = view.findViewById(R.id.mapView);
-        mMapView.onCreate(null);
+            // Set-up Toolbar
+            mToolbar = view.findViewById(R.id.toolbar_newcomer_map);
+            ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
+            mToolbar.setTitle("");
 
-        // Step-up Recycler View
-        recyclerView = view.findViewById(R.id.recycleListView_marker_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
+            if (this.getArguments() != null) {
+                newcomerMap = viewModel.getAllMaps().getValue()
+                        .get(this.getArguments().getInt(EXTRA_MAP_LIST_INDEX));
+                mToolbar.setTitle(newcomerMap.getTitle());
+                mMarkerListAdapter = new UserMarkerListAdapter(getActivity(),
+                        R.layout.item_user_marker,newcomerMap.getMarkers());
+                mMarkerListAdapter.setGeocoder(new Geocoder(getActivity()));
+            } else {
+                newcomerMap = new NewcomerMap();
+                newcomerMap.setMarkers(new ArrayList<UserMarker>());
+                showSetMapTitleDialog();
+                mToolbar.setTitle(newcomerMap.getTitle());
+                mMarkerListAdapter = new UserMarkerListAdapter(getActivity(),
+                        R.layout.item_user_marker,newcomerMap.getMarkers());
+                mMarkerListAdapter.setGeocoder(new Geocoder(getActivity()));
+            }
 
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setHasFixedSize(true);
+            mListView.setAdapter(mMarkerListAdapter);
+            mListView.setOnItemClickListener(onItemClickListener);
 
-        geocoder = new Geocoder(getActivity());
-        adapter = new MarkerRecyclerAdapter(geocoder);
-        adapter.setOnItemClickListener(onItemClickListener);
-        recyclerView.setAdapter(adapter);
+            // Get MapView
+            mMapView = view.findViewById(R.id.mapView);
+            mMapView.onCreate(null);
 
-        // TODO: Instance adapter, set OnButtonClickListeners and OnItemClickListener
+            // TODO: Instance adapter, set OnButtonClickListeners
 
-        if (this.getArguments() != null) {
-            newcomerMap = viewModel.getAllMaps().getValue()
-                    .get(this.getArguments().getInt(EXTRA_MAP_LIST_INDEX));
-            toolbar.setTitle(newcomerMap.getTitle());
-            adapter.setMarkers(newcomerMap.getMarkers());
+            // TODO: Save and cancel button
+            // TODO: Edit title menu options
 
-            // TODO fill out out marker RecyclerView fields
-
-        } else {
-            newcomerMap = new NewcomerMap();
-            newcomerMap.setMarkers(new ArrayList<UserMarker>());
-            showSetMapTitleDialog();
-            toolbar.setTitle(newcomerMap.getTitle());
-            adapter.setMarkers(newcomerMap.getMarkers());
+            // TODO: Override onBackPressed/OnNavigate
+            // to change the title
+            // to validate and prompt save dialog
         }
 
-        // TODO: Save and cancel button
-        // TODO: Edit title menu options
-
-        // TODO: Override onBackPressed/OnNavigate
-        // to change the title
-        // to validate and prompt save dialog
 
         return view;
     }
@@ -163,12 +154,12 @@ public class NewcomerMapFragment extends Fragment {
     }
 
     private void moveCamera(LatLng latLng) {
-        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 latLng, DEFAULT_ZOOM_LEVEL));
     }
 
     private void moveCamera(LatLng latLng, int zoom) {
-        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 latLng, zoom));
     }
 
@@ -185,7 +176,7 @@ public class NewcomerMapFragment extends Fragment {
 
                 } else {
                     newcomerMap.setTitle(title.trim());
-                    toolbar.setTitle(newcomerMap.getTitle());
+                    mToolbar.setTitle(newcomerMap.getTitle());
                 }
             }
         });
@@ -205,7 +196,7 @@ public class NewcomerMapFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
                 } else {
                     marker.setTitle(title.trim());
-                    adapter.notifyDataSetChanged();
+                    mMarkerListAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -218,10 +209,10 @@ public class NewcomerMapFragment extends Fragment {
     private final OnMapReadyCallback onMapReadyCallback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(final GoogleMap googleMap) {
-            gMap = googleMap;
+            mGoogleMap = googleMap;
             // Enable map zoom buttons
-            gMap.getUiSettings().setZoomControlsEnabled(true);
-            gMap.getUiSettings().setCompassEnabled(true);
+            mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+            mGoogleMap.getUiSettings().setCompassEnabled(true);
 
             // One more permission check
             if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -233,12 +224,12 @@ public class NewcomerMapFragment extends Fragment {
             } else {
                 // Permissions OK:
                 // Show and animate camera to the current location
-                gMap.setMyLocationEnabled(true);
-                gMap.getUiSettings().setMyLocationButtonEnabled(true);
+                mGoogleMap.setMyLocationEnabled(true);
+                mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
                 // Get current device location ASYNCHRONOUSLY
                 if (getArguments() == null) {
-                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-                    final Task locationTask = fusedLocationClient.getLastLocation();
+                    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+                    final Task locationTask = mFusedLocationClient.getLastLocation();
                     locationTask.addOnCompleteListener(new OnCompleteListener<Location>() {
                         @Override
                         public void onComplete(@NonNull Task<Location> task) {
@@ -256,7 +247,7 @@ public class NewcomerMapFragment extends Fragment {
             if (newcomerMap != null) {
                 // UserMarker tracking approach
                 for (UserMarker userMarker : newcomerMap.getMarkers()) {
-                    Marker mapMarker = gMap.addMarker(new MarkerOptions()
+                    Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(
                                     userMarker.getLocation().getLatitude(),
                                     userMarker.getLocation().getLongitude()))
@@ -264,12 +255,12 @@ public class NewcomerMapFragment extends Fragment {
                             .snippet("Lat: " + userMarker.getLocation().getLatitude() +
                                     " Lng: " + userMarker.getLocation().getLongitude()));
                     mapMarker.setTag(userMarker);
-                    markerHashMap.put(userMarker, mapMarker);
+                    mMarkerHashMap.put(userMarker, mapMarker);
                 }
 //                // Index tracking approach
 //                for (int index = 0; index >= newcomerMap.getMarkers().size(); index++) {
 //                    UserMarker userMarker = newcomerMap.getMarkers().get(index);
-//                    Marker mapMarker = gMap.addMarker(new MarkerOptions()
+//                    Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
 //                            .position(new LatLng(
 //                                    userMarker.getLocation().getLatitude(),
 //                                    userMarker.getLocation().getLongitude()))
@@ -280,19 +271,18 @@ public class NewcomerMapFragment extends Fragment {
 //                }
             }
             // Set on MAP HOLD Listener
-            gMap.setOnMapLongClickListener(onMapLongClickListener);
+            mGoogleMap.setOnMapLongClickListener(onMapLongClickListener);
             // Set on MARKER TAP Listener
-            gMap.setOnMarkerClickListener(onMarkerClickListener);
+            mGoogleMap.setOnMarkerClickListener(onMarkerClickListener);
         }
     };
 
-    private final MarkerRecyclerAdapter.OnItemClickListener onItemClickListener
-            = new MarkerRecyclerAdapter.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener onItemClickListener
+            = new AdapterView.OnItemClickListener() {
         @Override
-        public void onItemClick(UserMarker marker) {
-            Marker mapMarker = markerHashMap.get(marker);
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Marker mapMarker = mMarkerHashMap.get(newcomerMap.getMarkers().get(position));
             moveCamera(mapMarker.getPosition());
-            mapMarker.showInfoWindow();
         }
     };
 
@@ -305,7 +295,7 @@ public class NewcomerMapFragment extends Fragment {
             userMarker.setLocation(new GeoPoint(latLng.latitude, latLng.longitude));
             showSetMarkerTitleDialog(userMarker);
             newcomerMap.getMarkers().add(userMarker);
-            Marker mapMarker = gMap.addMarker(new MarkerOptions()
+            Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(
                             userMarker.getLocation().getLatitude(),
                             userMarker.getLocation().getLongitude()))
@@ -313,8 +303,8 @@ public class NewcomerMapFragment extends Fragment {
                     .snippet("Lat: " + userMarker.getLocation().getLatitude() +
                             " Lng: " + userMarker.getLocation().getLongitude()));
             mapMarker.setTag(userMarker);
-            markerHashMap.put(userMarker, mapMarker);
-            adapter.notifyItemInserted(newcomerMap.getMarkers().indexOf(userMarker));
+            mMarkerHashMap.put(userMarker, mapMarker);
+            mMarkerListAdapter.notifyDataSetChanged();
         }
     };
 
@@ -323,26 +313,8 @@ public class NewcomerMapFragment extends Fragment {
         @Override
         public boolean onMarkerClick(Marker marker) {
             int markerIndex = newcomerMap.getMarkers().indexOf(marker.getTag());
-            // Scroll item 2 to 20 pixels from the top
-            // linearLayoutManager.scrollToPositionWithOffset(2, 20);
 
-            // this fucks up
-            recyclerView.scrollToPosition(markerIndex);
-            recyclerView.findViewHolderForAdapterPosition(markerIndex)
-                    .itemView.performClick();
-
-//            // this doesnt
-//            RecyclerView.ViewHolder viewHolder = recyclerView
-//                    .findViewHolderForAdapterPosition(markerIndex);
-//            if (viewHolder != null) {
-//                recyclerView.scrollToPosition(markerIndex);
-//                viewHolder.itemView.performClick();
-//
-//            } else {
-//                adapter.notifyItemChanged(markerIndex);
-//            }
-
-
+            mListView.smoothScrollToPosition(markerIndex);
             return false;
         }
     };

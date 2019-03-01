@@ -55,6 +55,8 @@ public class MapListFragment extends Fragment {
             }
         });
 
+
+
         mapListRecyclerView = view.findViewById(R.id.recycleListView_map_list);
         mapListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mapListRecyclerView.setHasFixedSize(true);
