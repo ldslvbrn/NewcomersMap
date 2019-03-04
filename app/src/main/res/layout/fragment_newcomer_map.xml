@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="100"
-    tools:context=".NewcomerMapFragment">
+    tools:context=".NewcomerMapFragment" >
 
      <include
          android:id="@+id/toolbar_newcomer_map"
@@ -20,7 +20,7 @@
         android:layout_marginBottom="4dp"/>
 
     <ListView
-        android:id="@+id/ListView_marker_list"
+        android:id="@+id/listView_marker_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="45"

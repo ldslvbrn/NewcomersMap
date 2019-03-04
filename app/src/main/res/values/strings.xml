@@ -16,5 +16,10 @@
     <string name="delete_word">Delete</string>
     <string name="create_map">Create Map:</string>
     <string name="map_title_hint">Map title...</string>
+    <string name="edit_title">Edit Title</string>
+    <string name="edit_description">Delete description</string>
+    <string name="delete_marker">Delete marker</string>
+    <string name="new_marker">New Marker</string>
+    <string name="new_map">New Map</string>
 
 </resources>

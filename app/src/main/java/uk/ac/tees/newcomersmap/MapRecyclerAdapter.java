@@ -43,7 +43,7 @@ public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.
         }
         holder.textViewMarkers.setText(markerCount);
 
-       // Use Geocoder and reverse-geolocate nearest address
+       // Use Geocoder and locate nearest address
         double latitude = currentMap.getLocation().getLatitude();
         double longitude = currentMap.getLocation().getLongitude();
         List<Address> addressList;

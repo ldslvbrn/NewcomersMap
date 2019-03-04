@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ public class MapTitleDialog extends DialogFragment {
 
     private EditText editTextMapTitle;
     private MapTitleDialogListener mapTitleDialogListener;
+    private String defaultText;
 
     @NonNull
     @Override
@@ -26,26 +28,42 @@ public class MapTitleDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_change_map_title,null);
 
         editTextMapTitle = view.findViewById(R.id.edit_map_title);
-
-
+        if(defaultText != null) {
+            editTextMapTitle.setText(defaultText);
+            editTextMapTitle.selectAll();
+        }
         builder.setView(view)
                 .setTitle("Map:")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        if (mapTitleDialogListener != null) {
+                            mapTitleDialogListener
+                                    .OnDialogReturn(getString(R.string.new_map));
+                        }
                     }
                 })
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (mapTitleDialogListener != null) {
-
-                            mapTitleDialogListener.OnDialogReturn(editTextMapTitle.getText().toString());
+                            mapTitleDialogListener
+                                    .OnDialogReturn(editTextMapTitle.getText().toString());
                         }
                     }
                 });
         return builder.create();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Show keyboard when fragments get created
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+    protected void setDefaultText(String text) {
+        this.defaultText = text;
     }
 
     public void setMapTitleDialogListener(MapTitleDialogListener mapTitleDialogListener) {

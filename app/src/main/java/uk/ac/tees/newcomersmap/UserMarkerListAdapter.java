@@ -19,7 +19,6 @@ public class UserMarkerListAdapter extends ArrayAdapter<UserMarker> {
 
     public static final String TAG = "UserMarkerListAdapter";
     private final int resource;
-    private View selectedView;
 
     private Context context;
     private Geocoder geocoder;
@@ -58,7 +57,6 @@ public class UserMarkerListAdapter extends ArrayAdapter<UserMarker> {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(resource, parent, false);
-
 
         TextView textViewTitle = convertView.findViewById(R.id.textView_marker_title);
         TextView textViewLocation = convertView.findViewById(R.id.textView_marker_location);

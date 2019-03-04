@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ public class MarkerTitleDialog extends DialogFragment {
 
     private EditText editTextMarkerTitle;
     private MarkerTitleDialogListener markerTitleDialogListener;
+    private String defaultText;
 
     @NonNull
     @Override
@@ -26,30 +28,43 @@ public class MarkerTitleDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_change_marker_title,null);
 
         editTextMarkerTitle = view.findViewById(R.id.edit_marker_title);
-
+        if(defaultText != null) {
+            editTextMarkerTitle.setText(defaultText);
+            editTextMarkerTitle.selectAll();
+        }
         builder.setView(view)
                 .setTitle("Marker:")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (markerTitleDialogListener != null) {
+                            markerTitleDialogListener
+                                    .OnDialogReturn(getString(R.string.new_marker));
 
+                        }
                     }
                 })
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (markerTitleDialogListener != null) {
-                            markerTitleDialogListener.OnDialogReturn(editTextMarkerTitle.getText().toString());
+                            markerTitleDialogListener
+                                    .OnDialogReturn(editTextMarkerTitle.getText().toString());
                         }
                     }
                 });
         return builder.create();
     }
 
-    protected void setEditTextValue(String text) {
-        if (editTextMarkerTitle != null) {
-            this.editTextMarkerTitle.setText(text);
-        }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Show keyboard when fragments get created
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    }
+
+    protected void setDefaultText(String text) {
+        this.defaultText = text;
     }
 
     public void setMarkerTitleDialogListener(MarkerTitleDialogListener markerTitleDialogListener) {
