@@ -145,7 +145,7 @@ public class NewcomerMapViewModel extends AndroidViewModel {
                 });
     }
 
-    public void deleteMap(final NewcomerMap map, OnServiceResultListener listener) {
+    public void deleteMap(final NewcomerMap map, final OnServiceResultListener listener) {
         userDataReference.document(map.getDocumentId()).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -153,8 +153,10 @@ public class NewcomerMapViewModel extends AndroidViewModel {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "deleteMap: onComplete: Service reached successfully");
                             allMaps.getValue().remove(map);
+                            listener.OnResultCallback(true);
                         } else {
                             Log.d(TAG, "deleteMap: onFailure: Failed to reach online services");
+                            listener.OnResultCallback(false);
                         }
                     }
                 });

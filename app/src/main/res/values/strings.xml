@@ -25,5 +25,6 @@
     <string name="unsaved_changes_message">Would you like to save your changes?</string>
     <string name="delete_map">Delete Map</string>
     <string name="publish_map">Publish Map</string>
+    <string name="save_map">Save Map</string>
 
 </resources>

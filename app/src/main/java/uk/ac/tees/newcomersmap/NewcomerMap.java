@@ -19,7 +19,7 @@ public class NewcomerMap {
     private GeoPoint location;
     private List<UserMarker> markers;
     @Exclude
-    private OnMapChangeListener onMapChangeListener;
+    private OnContentChangeListener onContentChangeListener;
 
     public NewcomerMap() {
         // No-args constructor required for Firestore db
@@ -39,8 +39,8 @@ public class NewcomerMap {
     @Exclude
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
-        if (onMapChangeListener != null) {
-            onMapChangeListener.onContentChange(true);
+        if (onContentChangeListener != null) {
+            onContentChangeListener.onContentChange(true);
         }
     }
 
@@ -50,8 +50,8 @@ public class NewcomerMap {
 
     public void setTitle(String title) {
         this.title = title;
-        if (onMapChangeListener != null) {
-            onMapChangeListener.onContentChange(true);
+        if (onContentChangeListener != null) {
+            onContentChangeListener.onContentChange(true);
         }
     }
 
@@ -61,8 +61,8 @@ public class NewcomerMap {
 
     public void setLocation(GeoPoint location) {
         this.location = location;
-        if (onMapChangeListener != null) {
-            onMapChangeListener.onContentChange(true);
+        if (onContentChangeListener != null) {
+            onContentChangeListener.onContentChange(true);
         }
     }
 
@@ -73,17 +73,24 @@ public class NewcomerMap {
     public void setMarkers(List<UserMarker> markers) {
 
         this.markers = new OnChangeCallableArrayList<>(markers);
-        if (onMapChangeListener != null) {
-            onMapChangeListener.onContentChange(true);
+        if (onContentChangeListener != null) {
+            onContentChangeListener.onContentChange(true);
         }
     }
 
     @Exclude
-    public void setOnMapChangeListener(OnMapChangeListener onMapChangeListener) {
-        this.onMapChangeListener = onMapChangeListener;
+    public void setOnContentChangeListener(OnContentChangeListener onContentChangeListener) {
+        this.onContentChangeListener = onContentChangeListener;
     }
 
-    public interface OnMapChangeListener {
+    @Exclude
+    public void removeOnContentChangeListener(OnContentChangeListener onContentChangeListener) {
+        if(this.onContentChangeListener == onContentChangeListener) {
+            this.onContentChangeListener = null;
+        }
+    }
+
+    public interface OnContentChangeListener {
         void onContentChange(boolean b);
     }
 
@@ -95,104 +102,104 @@ public class NewcomerMap {
 
         @Override
         public E set(int index, E element) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.set(index, element);
         }
 
         @Override
         public boolean add(E e) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.add(e);
         }
 
         @Override
         public void add(int index, E element) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             super.add(index, element);
         }
 
         @Override
         public E remove(int index) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.remove(index);
         }
 
         @Override
         public boolean remove(@Nullable Object o) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.remove(o);
         }
 
         @Override
         public void clear() {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             super.clear();
         }
 
         @Override
         public boolean addAll(@NonNull Collection<? extends E> c) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.addAll(c);
         }
 
         @Override
         public boolean addAll(int index, @NonNull Collection<? extends E> c) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.addAll(index, c);
         }
 
         @Override
         protected void removeRange(int fromIndex, int toIndex) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             super.removeRange(fromIndex, toIndex);
         }
 
         @Override
         public boolean removeAll(@NonNull Collection<?> c) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.removeAll(c);
         }
 
         @Override
         public boolean retainAll(@NonNull java.util.Collection<?> c) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.retainAll(c);
         }
 
         @Override
         public boolean removeIf(@NonNull Predicate<? super E> filter) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             return super.removeIf(filter);
         }
 
         @Override
         public void replaceAll(@NonNull UnaryOperator<E> operator) {
-            if (onMapChangeListener != null) {
-                onMapChangeListener.onContentChange(true);
+            if (onContentChangeListener != null) {
+                onContentChangeListener.onContentChange(true);
             }
             super.replaceAll(operator);
         }
