@@ -31,7 +31,7 @@ public class TitleScreenFragment extends Fragment {
         // Check if the user was signed in using Google Account ( !=null)
         if(currentUser != null) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT, currentUser);
+            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SIGN_IN_ACCOUNT, currentUser);
             // Navigate to the user's maps list
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment)
                     .navigate(R.id.action_titleScreenFragment_to_mapListFragment, bundle);

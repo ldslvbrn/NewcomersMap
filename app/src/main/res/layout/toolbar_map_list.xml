@@ -6,7 +6,7 @@
     android:background="@color/colorPrimary"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:navigationIcon="@drawable/ic_close_white"
-    android:elevation="4dp">
+    android:elevation="4dp"
+    app:title="Your Newcomer Maps">
 
 </androidx.appcompat.widget.Toolbar>

@@ -54,6 +54,12 @@
         <action
             android:id="@+id/action_mapListFragment_to_newcomerMapFragment"
             app:destination="@id/newcomerMapFragment" />
+        <action
+            android:id="@+id/action_mapListFragment_to_signInFragment"
+            app:destination="@id/singInFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/newcomerMapFragment"

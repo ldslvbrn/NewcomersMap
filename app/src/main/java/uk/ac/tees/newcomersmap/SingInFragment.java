@@ -28,6 +28,7 @@ public class SingInFragment extends Fragment {
     public static final String TAG = "SingInFragment";
     public static final int GOOGLE_SIGN_IN_REQUEST = 1;
     private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInOptions googleSignInOptions;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,15 +38,13 @@ public class SingInFragment extends Fragment {
         // Inflate the layout for this fragment and instantiate the View
         View view = inflater.inflate(R.layout.fragment_sing_in, container, false);
 
-        String clientId = getString(R.string.default_web_client_id);
-
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
+        googleSignInOptions = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 // Value default_web_client_id is generated at compile time
                 // from google-services.json file
-                .requestIdToken(clientId)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -58,8 +57,8 @@ public class SingInFragment extends Fragment {
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, GOOGLE_SIGN_IN_REQUEST);
+                startActivityForResult(
+                        mGoogleSignInClient.getSignInIntent(), GOOGLE_SIGN_IN_REQUEST);
             }
         });
 
@@ -87,7 +86,7 @@ public class SingInFragment extends Fragment {
 
             // Signed in successfully, show authenticated UI.
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SING_IN_ACCOUNT,account);
+            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SIGN_IN_ACCOUNT,account);
             Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
                     .navigate(R.id.action_singInFragment_to_mapListFragment, bundle);
 

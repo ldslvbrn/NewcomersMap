@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -124,9 +123,6 @@ public class NewcomerMapFragment extends Fragment {
             // Get MapView
             mMapView = view.findViewById(R.id.mapView);
             mMapView.onCreate(null);
-
-            // TODO: Save and cancel button
-            // TODO: Edit title menu options
         }
         return view;
     }
@@ -371,7 +367,7 @@ public class NewcomerMapFragment extends Fragment {
                     return true;
 
                 case R.id.option_item_publish_map:
-                    Toast.makeText(getActivity(), "Coming soon!...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.coming_soon), Toast.LENGTH_SHORT).show();
                     return true;
 
                 default:

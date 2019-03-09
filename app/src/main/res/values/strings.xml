@@ -26,5 +26,9 @@
     <string name="delete_map">Delete Map</string>
     <string name="publish_map">Publish Map</string>
     <string name="save_map">Save Map</string>
+    <string name="about">About</string>
+    <string name="sign_out">Sign out</string>
+    <string name="public_maps">Public Maps</string>
+    <string name="coming_soon">Feature coming soon!...</string>
 
 </resources>
