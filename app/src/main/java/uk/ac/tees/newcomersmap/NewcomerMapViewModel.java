@@ -46,6 +46,7 @@ public class NewcomerMapViewModel extends AndroidViewModel {
     public NewcomerMapViewModel(Application application) {
         super(application);
         // Assign variables
+//        FirebaseApp.initializeApp(application.getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
         this.allMaps = new MutableLiveData<>();
     }
@@ -171,7 +172,7 @@ public class NewcomerMapViewModel extends AndroidViewModel {
         return AUTHENTICATED;
     }
 
-    public interface OnServiceResultListener {
+    protected interface OnServiceResultListener {
         void OnResultCallback(Boolean isSuccessful);
     }
 

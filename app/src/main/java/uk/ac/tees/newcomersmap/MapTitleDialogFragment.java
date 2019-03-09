@@ -13,11 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class MapTitleDialog extends DialogFragment {
+public class MapTitleDialogFragment extends DialogFragment {
 
     private EditText editTextMapTitle;
-    private MapTitleDialogListener mapTitleDialogListener;
-    private String defaultText;
+    private TitleDialogListener titleDialogListener;
+    private NewcomerMap mNewcomerMap;
 
     @NonNull
     @Override
@@ -25,30 +25,33 @@ public class MapTitleDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_change_map_title,null);
+        View view = inflater.inflate(R.layout.dialog_change_map_title, null);
 
         editTextMapTitle = view.findViewById(R.id.edit_map_title);
-        if(defaultText != null) {
-            editTextMapTitle.setText(defaultText);
-            editTextMapTitle.selectAll();
-        }
+        editTextMapTitle.setText(mNewcomerMap.getTitle());
+        editTextMapTitle.selectAll();
         builder.setView(view)
                 .setTitle("Map:")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (mapTitleDialogListener != null) {
-                            mapTitleDialogListener
-                                    .OnDialogReturn(getString(R.string.new_map));
+                        if (titleDialogListener != null) {
+                            titleDialogListener
+                                    .onDialogResult(DialogResult.CANCEL_PRESSED);
                         }
                     }
                 })
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (mapTitleDialogListener != null) {
-                            mapTitleDialogListener
-                                    .OnDialogReturn(editTextMapTitle.getText().toString());
+                        if (titleDialogListener != null) {
+                            String title = editTextMapTitle.getText().toString().trim();
+                            if (title.isEmpty() || title.length() < 3 || title.length() > 16) {
+                                titleDialogListener.onDialogResult(DialogResult.INPUT_INVALID);
+                            } else {
+                                mNewcomerMap.setTitle(title);
+                                titleDialogListener.onDialogResult(DialogResult.INPUT_OK);
+                            }
                         }
                     }
                 });
@@ -62,15 +65,12 @@ public class MapTitleDialog extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    protected void setDefaultText(String text) {
-        this.defaultText = text;
+    public void setNewcomerMap(NewcomerMap mNewcomerMap) {
+        this.mNewcomerMap = mNewcomerMap;
     }
 
-    public void setMapTitleDialogListener(MapTitleDialogListener mapTitleDialogListener) {
-        this.mapTitleDialogListener = mapTitleDialogListener;
+    public void setTitleDialogListener(TitleDialogListener titleDialogListener) {
+        this.titleDialogListener = titleDialogListener;
     }
 
-    protected interface MapTitleDialogListener {
-        void OnDialogReturn(String title);
-    }
 }

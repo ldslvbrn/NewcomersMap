@@ -37,11 +37,8 @@ public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.
     public void onBindViewHolder(@NonNull MapHolder holder, int position) {
         NewcomerMap currentMap = maps.get(position);
         holder.textViewTitle.setText(currentMap.getTitle());
-        int markerCount = 0;
-        for (UserMarker marker : maps.get(position).getMarkers()) {
-            markerCount++;
-        }
-        holder.textViewMarkers.setText(markerCount);
+        int markerCount = maps.get(position).getMarkers().size();
+        holder.textViewMarkers.setText(String.valueOf(markerCount));
 
        // Use Geocoder and locate nearest address
         double latitude = currentMap.getLocation().getLatitude();
@@ -50,7 +47,7 @@ public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.
         try {
             addressList = geocoder.getFromLocation(latitude,longitude,1);
             Address address = addressList.get(0);
-            String location = address.getAddressLine(0) + ", "
+            String location = address.getSubAdminArea() + ", "
                     + address.getCountryCode();
             holder.textViewLocation.setText(location);
         } catch (IOException e) {

@@ -2,17 +2,16 @@ package uk.ac.tees.newcomersmap;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.NavOptions;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
 
@@ -20,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     private static final int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
             case ASK_MULTIPLE_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0) {
                     // If request is cancelled, the result arrays are empty.
-                    for (int result: grantResults) {
-                        if (result != PackageManager.PERMISSION_GRANTED){
+                    for (int result : grantResults) {
+                        if (result != PackageManager.PERMISSION_GRANTED) {
                             Bundle bundle = new Bundle();
                             bundle.putInt(ErrorFragment.EXTRA_ERROR_CODE,
                                     ErrorFragment.PERMISSION_ERROR_CODE);
@@ -80,4 +80,5 @@ public class MainActivity extends AppCompatActivity {
                     .navigate(R.id.titleScreenFragment);
         }
     }
+
 }

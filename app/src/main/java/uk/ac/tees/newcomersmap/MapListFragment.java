@@ -17,6 +17,7 @@ import java.util.List;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -45,17 +46,13 @@ public class MapListFragment extends Fragment {
 
         loadingSpinnerView = view.findViewById(R.id.constraintLayout_loading_screen_holder);
         addButton = view.findViewById(R.id.floatingActionButton_add_map);
-
-        FloatingActionButton buttonAddMap = view.findViewById(R.id.floatingActionButton_add_map);
-        buttonAddMap.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
                         .navigate(R.id.action_mapListFragment_to_newcomerMapFragment);
             }
         });
-
-
 
         mapListRecyclerView = view.findViewById(R.id.recycleListView_map_list);
         mapListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -70,7 +67,7 @@ public class MapListFragment extends Fragment {
                         viewModel.getAllMaps().getValue().indexOf(map));
 
                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
-                        .navigate(R.id.action_mapListFragment_to_newcomerMapFragment);
+                        .navigate(R.id.action_mapListFragment_to_newcomerMapFragment, bundle);
             }
         });
         mapListRecyclerView.setAdapter(adapter);
@@ -85,7 +82,8 @@ public class MapListFragment extends Fragment {
         super.onStart();
 
         // Set-up ViewModel
-        viewModel = ViewModelProviders.of(this)
+
+        viewModel = ViewModelProviders.of(getActivity())
                 .get(NewcomerMapViewModel.class);
         // Observe ViewModel
         viewModel.getAllMaps().observe(getActivity(), new Observer<List<NewcomerMap>>() {

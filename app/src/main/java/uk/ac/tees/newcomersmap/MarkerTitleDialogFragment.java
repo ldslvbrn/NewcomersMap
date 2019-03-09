@@ -13,11 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class MarkerTitleDialog extends DialogFragment {
+public class MarkerTitleDialogFragment extends DialogFragment {
 
     private EditText editTextMarkerTitle;
-    private MarkerTitleDialogListener markerTitleDialogListener;
-    private String defaultText;
+    private TitleDialogListener titleDialogListener;
+    private UserMarker mUserMarker;
 
     @NonNull
     @Override
@@ -25,31 +25,33 @@ public class MarkerTitleDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_change_marker_title,null);
+        View view = inflater.inflate(R.layout.dialog_change_marker_title, null);
 
         editTextMarkerTitle = view.findViewById(R.id.edit_marker_title);
-        if(defaultText != null) {
-            editTextMarkerTitle.setText(defaultText);
-            editTextMarkerTitle.selectAll();
-        }
+        editTextMarkerTitle.setText(mUserMarker.getTitle());
+        editTextMarkerTitle.selectAll();
         builder.setView(view)
                 .setTitle("Marker:")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (markerTitleDialogListener != null) {
-                            markerTitleDialogListener
-                                    .OnDialogReturn(getString(R.string.new_marker));
-
+                        if (titleDialogListener != null) {
+                            titleDialogListener
+                                    .onDialogResult(DialogResult.CANCEL_PRESSED);
                         }
                     }
                 })
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (markerTitleDialogListener != null) {
-                            markerTitleDialogListener
-                                    .OnDialogReturn(editTextMarkerTitle.getText().toString());
+                        if (titleDialogListener != null) {
+                            String title = editTextMarkerTitle.getText().toString().trim();
+                            if (title.isEmpty() || title.length() < 3 || title.length() > 16) {
+                                titleDialogListener.onDialogResult(DialogResult.INPUT_INVALID);
+                            } else {
+                                mUserMarker.setTitle(title);
+                                titleDialogListener.onDialogResult(DialogResult.INPUT_OK);
+                            }
                         }
                     }
                 });
@@ -63,15 +65,11 @@ public class MarkerTitleDialog extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    protected void setDefaultText(String text) {
-        this.defaultText = text;
+    public void setUserMarker(UserMarker mUserMarker) {
+        this.mUserMarker = mUserMarker;
     }
 
-    public void setMarkerTitleDialogListener(MarkerTitleDialogListener markerTitleDialogListener) {
-        this.markerTitleDialogListener = markerTitleDialogListener;
-    }
-
-    protected interface MarkerTitleDialogListener {
-        void OnDialogReturn(String title);
+    public void setTitleDialogListener(TitleDialogListener titleDialogListener) {
+        this.titleDialogListener = titleDialogListener;
     }
 }

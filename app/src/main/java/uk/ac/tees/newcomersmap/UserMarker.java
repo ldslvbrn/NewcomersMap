@@ -4,16 +4,17 @@ import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 
 public class UserMarker {
-    private String documentId, title;
+    private String documentId, title, description;
     private GeoPoint location;
 
     public UserMarker() {
-        // No-args constructor required for Firebase Firestore db
+        // No-args constructor required for Firestore db
     }
 
-    public UserMarker(String documentId, String title, GeoPoint location) {
+    public UserMarker(String documentId, String title, String description, GeoPoint location) {
         this.documentId = documentId;
         this.title = title;
+        this.description = description;
         this.location = location;
     }
 
@@ -32,6 +33,14 @@ public class UserMarker {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public GeoPoint getLocation() {

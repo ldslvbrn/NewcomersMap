@@ -30,13 +30,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:singleLine="true"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_marker_title"
-        tools:text="~location~"
-        android:singleLine="true"/>
+        tools:text="~location~" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
