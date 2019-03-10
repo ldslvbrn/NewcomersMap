@@ -35,6 +35,7 @@ public class MapListFragment extends Fragment {
     public static final String TAG = "MapListFragment";
     public static final String EXTRA_GOOGLE_SIGN_IN_ACCOUNT =
             "uk.ac.tees.newcomersmap.EXTRA_GOOGLE_SIGN_IN_ACCOUNT";
+
     private GoogleSignInAccount mGoogleSignInAccount;
     private ConstraintLayout loadingSpinnerView;
     private RecyclerView mapListRecyclerView;
