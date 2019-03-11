@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class MarkerTitleDialogFragment extends DialogFragment {
+public class MarkerDescriptionDialogFragment extends DialogFragment {
 
-    private EditText editTextMarkerTitle;
+    private EditText editTextMarkerDesc;
     private DialogListener dialogListener;
     private UserMarker mUserMarker;
 
@@ -25,11 +25,13 @@ public class MarkerTitleDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_change_marker_title, null);
+        View view = inflater.inflate(R.layout.dialog_change_marker_description, null);
 
-        editTextMarkerTitle = view.findViewById(R.id.edit_marker_description);
-        editTextMarkerTitle.setText(mUserMarker.getTitle());
-        editTextMarkerTitle.selectAll();
+        editTextMarkerDesc = view.findViewById(R.id.edit_marker_description);
+        if (mUserMarker.getDescription() != null) {
+            editTextMarkerDesc.setText(mUserMarker.getDescription());
+        }
+        editTextMarkerDesc.selectAll();
         builder.setView(view)
                 .setTitle("Marker:")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -45,13 +47,15 @@ public class MarkerTitleDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (dialogListener != null) {
-                            String title = editTextMarkerTitle.getText().toString().trim();
-                            if (title.isEmpty() || title.length() < 3 || title.length() > 16) {
-                                dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
-                            } else {
-                                mUserMarker.setTitle(title);
-                                dialogListener.onDialogResult(DialogResult.INPUT_OK);
-                            }
+                            if (editTextMarkerDesc.getText() != null) {
+                                String desc = editTextMarkerDesc.getText().toString().trim();
+                                if (desc.length() > 40) {
+                                    dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
+                                } else {
+                                    mUserMarker.setDescription(desc);
+                                    dialogListener.onDialogResult(DialogResult.INPUT_OK);
+                                }
+                            } else  dialogListener.onDialogResult(DialogResult.INPUT_OK);
                         }
                     }
                 });

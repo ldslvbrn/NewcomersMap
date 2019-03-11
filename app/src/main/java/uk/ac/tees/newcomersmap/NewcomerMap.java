@@ -39,9 +39,7 @@ public class NewcomerMap {
     @Exclude
     public void setDocumentId(String documentId) {
         this.documentId = documentId;
-        if (onContentChangeListener != null) {
-            onContentChangeListener.onContentChange(true);
-        }
+        notifyObservers(true);
     }
 
     public String getTitle() {
@@ -50,9 +48,7 @@ public class NewcomerMap {
 
     public void setTitle(String title) {
         this.title = title;
-        if (onContentChangeListener != null) {
-            onContentChangeListener.onContentChange(true);
-        }
+        notifyObservers(true);
     }
 
     public GeoPoint getLocation() {
@@ -61,9 +57,7 @@ public class NewcomerMap {
 
     public void setLocation(GeoPoint location) {
         this.location = location;
-        if (onContentChangeListener != null) {
-            onContentChangeListener.onContentChange(true);
-        }
+        notifyObservers(true);
     }
 
     public List<UserMarker> getMarkers() {
@@ -73,9 +67,7 @@ public class NewcomerMap {
     public void setMarkers(List<UserMarker> markers) {
 
         this.markers = new OnChangeCallableArrayList<>(markers);
-        if (onContentChangeListener != null) {
-            onContentChangeListener.onContentChange(true);
-        }
+        notifyObservers(true);
     }
 
     @Exclude
@@ -87,6 +79,16 @@ public class NewcomerMap {
     public void removeOnContentChangeListener(OnContentChangeListener onContentChangeListener) {
         if(this.onContentChangeListener == onContentChangeListener) {
             this.onContentChangeListener = null;
+            for(UserMarker marker : markers) {
+                marker.removeOnContentChangeListener(onContentChangeListener);
+            }
+        }
+    }
+
+    @Exclude
+    private void notifyObservers(boolean b) {
+        if (onContentChangeListener != null) {
+            onContentChangeListener.onContentChange(true);
         }
     }
 
@@ -102,105 +104,79 @@ public class NewcomerMap {
 
         @Override
         public E set(int index, E element) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.set(index, element);
         }
 
         @Override
         public boolean add(E e) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.add(e);
         }
 
         @Override
         public void add(int index, E element) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             super.add(index, element);
         }
 
         @Override
         public E remove(int index) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.remove(index);
         }
 
         @Override
         public boolean remove(@Nullable Object o) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.remove(o);
         }
 
         @Override
         public void clear() {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             super.clear();
         }
 
         @Override
         public boolean addAll(@NonNull Collection<? extends E> c) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.addAll(c);
         }
 
         @Override
         public boolean addAll(int index, @NonNull Collection<? extends E> c) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.addAll(index, c);
         }
 
         @Override
         protected void removeRange(int fromIndex, int toIndex) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             super.removeRange(fromIndex, toIndex);
         }
 
         @Override
         public boolean removeAll(@NonNull Collection<?> c) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.removeAll(c);
         }
 
         @Override
         public boolean retainAll(@NonNull java.util.Collection<?> c) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.retainAll(c);
         }
 
         @Override
         public boolean removeIf(@NonNull Predicate<? super E> filter) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             return super.removeIf(filter);
         }
 
         @Override
         public void replaceAll(@NonNull UnaryOperator<E> operator) {
-            if (onContentChangeListener != null) {
-                onContentChangeListener.onContentChange(true);
-            }
+            notifyObservers(true);
             super.replaceAll(operator);
         }
     }

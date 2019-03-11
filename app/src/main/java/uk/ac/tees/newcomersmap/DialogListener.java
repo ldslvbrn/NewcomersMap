@@ -1,5 +1,5 @@
 package uk.ac.tees.newcomersmap;
 
-public interface TitleDialogListener {
+public interface DialogListener {
     void onDialogResult(DialogResult dialogResult);
 }

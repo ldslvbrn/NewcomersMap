@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 public class MapTitleDialogFragment extends DialogFragment {
 
     private EditText editTextMapTitle;
-    private TitleDialogListener titleDialogListener;
+    private DialogListener dialogListener;
     private NewcomerMap mNewcomerMap;
 
     @NonNull
@@ -35,8 +35,8 @@ public class MapTitleDialogFragment extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (titleDialogListener != null) {
-                            titleDialogListener
+                        if (dialogListener != null) {
+                            dialogListener
                                     .onDialogResult(DialogResult.CANCEL_PRESSED);
                         }
                     }
@@ -44,13 +44,13 @@ public class MapTitleDialogFragment extends DialogFragment {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (titleDialogListener != null) {
+                        if (dialogListener != null) {
                             String title = editTextMapTitle.getText().toString().trim();
                             if (title.isEmpty() || title.length() < 3 || title.length() > 16) {
-                                titleDialogListener.onDialogResult(DialogResult.INPUT_INVALID);
+                                dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
                             } else {
                                 mNewcomerMap.setTitle(title);
-                                titleDialogListener.onDialogResult(DialogResult.INPUT_OK);
+                                dialogListener.onDialogResult(DialogResult.INPUT_OK);
                             }
                         }
                     }
@@ -69,8 +69,8 @@ public class MapTitleDialogFragment extends DialogFragment {
         this.mNewcomerMap = mNewcomerMap;
     }
 
-    public void setTitleDialogListener(TitleDialogListener titleDialogListener) {
-        this.titleDialogListener = titleDialogListener;
+    public void setDialogListener(DialogListener dialogListener) {
+        this.dialogListener = dialogListener;
     }
 
 }

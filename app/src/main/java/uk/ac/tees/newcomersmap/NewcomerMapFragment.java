@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -190,7 +191,7 @@ public class NewcomerMapFragment extends Fragment {
                 return true;
 
             case R.id.option_item_edit_description:
-                // TODO
+                showSetMarkerDescDialog(mNewcomerMap.getMarkers().get(position));
                 return true;
 
             case R.id.option_item_delete_marker:
@@ -220,7 +221,7 @@ public class NewcomerMapFragment extends Fragment {
     private void showSetMapTitleDialog(NewcomerMap newcomerMap) {
         MapTitleDialogFragment mapTitleDialogFragment = new MapTitleDialogFragment();
         mapTitleDialogFragment.setNewcomerMap(newcomerMap);
-        mapTitleDialogFragment.setTitleDialogListener(new TitleDialogListener() {
+        mapTitleDialogFragment.setDialogListener(new DialogListener() {
             @Override
             public void onDialogResult(DialogResult dialogResult) {
                 if (dialogResult == DialogResult.INPUT_INVALID) {
@@ -236,7 +237,7 @@ public class NewcomerMapFragment extends Fragment {
     private void showSetMarkerTitleDialog(final UserMarker marker) {
         MarkerTitleDialogFragment markerTitleDialogFragment = new MarkerTitleDialogFragment();
         markerTitleDialogFragment.setUserMarker(marker);
-        markerTitleDialogFragment.setTitleDialogListener(new TitleDialogListener() {
+        markerTitleDialogFragment.setDialogListener(new DialogListener() {
             @Override
             public void onDialogResult(DialogResult dialogResult) {
                 if (dialogResult == DialogResult.INPUT_INVALID) {
@@ -247,6 +248,29 @@ public class NewcomerMapFragment extends Fragment {
         });
         markerTitleDialogFragment.showNow(getActivity().getSupportFragmentManager(),
                 "Set Title Dialog");
+    }
+
+    private void  showSetMarkerDescDialog(final UserMarker marker) {
+        MarkerDescriptionDialogFragment markerDescriptionDialogFragment
+                = new MarkerDescriptionDialogFragment();
+        markerDescriptionDialogFragment.setUserMarker(marker);
+        markerDescriptionDialogFragment.setDialogListener(new DialogListener() {
+            @Override
+            public void onDialogResult(DialogResult dialogResult) {
+                if (dialogResult == DialogResult.INPUT_INVALID) {
+                    Toast.makeText(getActivity(),
+                            "The description must be up to 40 characters long", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (marker.getDescription() != null || !marker.getDescription().isEmpty()) {
+                    mMarkerHashMap.get(marker).setSnippet(marker.getDescription());
+                    // Refresh info window
+                    mMarkerHashMap.get(marker).showInfoWindow();
+                }
+            }
+        });
+        markerDescriptionDialogFragment.showNow(getActivity().getSupportFragmentManager(),
+                "Set Description Dialog");
     }
 
     private void returnToMapList() {
@@ -432,6 +456,7 @@ public class NewcomerMapFragment extends Fragment {
                             .snippet("Lat: " + userMarker.getLocation().getLatitude() +
                                     " Lng: " + userMarker.getLocation().getLongitude()));
                     mapMarker.setTag(userMarker);
+                    userMarker.setOnContentChangeListener(onContentChangeListener);
                     mMarkerHashMap.put(userMarker, mapMarker);
                 }
                 mListAdapter.notifyDataSetChanged();
@@ -466,9 +491,10 @@ public class NewcomerMapFragment extends Fragment {
                     .position(new LatLng(
                             userMarker.getLocation().getLatitude(),
                             userMarker.getLocation().getLongitude()))
-                    .title(userMarker.getTitle())
-                    .snippet("Lat: " + userMarker.getLocation().getLatitude() +
-                            " Lng: " + userMarker.getLocation().getLongitude()));
+                    .title(userMarker.getTitle()));
+            if (userMarker.getDescription() != null || !userMarker.getDescription().isEmpty()) {
+                mapMarker.setSnippet(userMarker.getDescription());
+            }
             mapMarker.setTag(userMarker);
             mMarkerHashMap.put(userMarker, mapMarker);
             mListAdapter.notifyDataSetChanged();
