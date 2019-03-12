@@ -47,8 +47,12 @@ public class MarkerDescriptionDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (dialogListener != null) {
-                            if (editTextMarkerDesc.getText() != null) {
+                            if (editTextMarkerDesc.getText() != null
+                                    || !editTextMarkerDesc.getText().toString().isEmpty()) {
                                 String desc = editTextMarkerDesc.getText().toString().trim();
+                                if (desc == null) {
+                                    mUserMarker.setDescription(null);
+                                }
                                 if (desc.length() > 40) {
                                     dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
                                 } else {

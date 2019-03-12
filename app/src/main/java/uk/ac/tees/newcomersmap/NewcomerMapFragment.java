@@ -264,9 +264,9 @@ public class NewcomerMapFragment extends Fragment {
                 }
                 if (marker.getDescription() != null || !marker.getDescription().isEmpty()) {
                     mMarkerHashMap.get(marker).setSnippet(marker.getDescription());
-                    // Refresh info window
-                    mMarkerHashMap.get(marker).showInfoWindow();
                 }
+                // Refresh info window
+                mMarkerHashMap.get(marker).showInfoWindow();
             }
         });
         markerDescriptionDialogFragment.showNow(getActivity().getSupportFragmentManager(),
