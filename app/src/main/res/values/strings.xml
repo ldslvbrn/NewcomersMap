@@ -30,7 +30,9 @@
     <string name="sign_out">Sign out</string>
     <string name="public_maps">Public Maps</string>
     <string name="coming_soon">Feature coming soon!...</string>
-    <string name="marker_description_hint">Breif place description...</string>
+    <string name="marker_description_hint">Brief place description...</string>
     <string name="marker_title_hint">Marker title...</string>
+    <string name="save_success">Map saved successfully</string>
+    <string name="save_error">Error. Unable to upload changes</string>
 
 </resources>

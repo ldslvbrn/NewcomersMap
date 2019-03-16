@@ -173,7 +173,7 @@ public class NewcomerMapFragment extends Fragment {
         switch (v.getId()) {
             case R.id.listView_marker_list:
                 getActivity().getMenuInflater().inflate(R.menu.menu_floating_marker, menu);
-                break;
+                return;
 
             default:
                 return;
@@ -199,6 +199,8 @@ public class NewcomerMapFragment extends Fragment {
                 mMarkerHashMap.get(userMarker).remove();
                 mMarkerHashMap.remove(userMarker);
                 mNewcomerMap.getMarkers().remove(userMarker);
+                mapValueChanged = true;
+                mNewcomerMap.removeOnContentChangeListener(onContentChangeListener);
                 mListAdapter.notifyDataSetChanged();
                 return true;
 
@@ -211,11 +213,6 @@ public class NewcomerMapFragment extends Fragment {
     private void moveCamera(LatLng latLng) {
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 latLng, DEFAULT_ZOOM_LEVEL));
-    }
-
-    private void moveCamera(LatLng latLng, int zoom) {
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                latLng, zoom));
     }
 
     private void showSetMapTitleDialog(NewcomerMap newcomerMap) {
@@ -315,7 +312,6 @@ public class NewcomerMapFragment extends Fragment {
         public boolean handleOnBackPressed() {
             if (mapValueChanged) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
                 builder.setMessage(R.string.unsaved_changes_message)
                         .setTitle(R.string.unsaved_changes_title);
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -336,7 +332,17 @@ public class NewcomerMapFragment extends Fragment {
                         saveNewcomerMap(new NewcomerMapViewModel.OnServiceResultListener() {
                             @Override
                             public void OnResultCallback(Boolean isSuccessful) {
-                                returnToMapList();
+                                if (isSuccessful) {
+                                    returnToMapList();
+                                    Toast.makeText(getActivity(), R.string.save_success, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle(R.string.save_map);
+                                    builder.setPositiveButton("OK",null);
+                                    builder.setMessage(R.string.save_error);
+                                    builder.setIcon(R.drawable.ic_warning);
+                                    builder.show();
+                                }
                             }
                         });
                     }
@@ -361,13 +367,19 @@ public class NewcomerMapFragment extends Fragment {
                         saveNewcomerMap(new NewcomerMapViewModel.OnServiceResultListener() {
                             @Override
                             public void OnResultCallback(Boolean isSuccessful) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle(R.string.save_map);
+                                builder.setPositiveButton("OK",null);
                                 if (isSuccessful) {
-                                    Toast.makeText(getActivity(), "Map succesfuly saved.", Toast.LENGTH_SHORT).show();
+                                    builder.setMessage(R.string.save_success);
+                                    builder.setIcon(R.drawable.ic_check);
                                     mapValueChanged = false;
                                     mNewcomerMap.setOnContentChangeListener(onContentChangeListener);
                                 } else {
-                                    Toast.makeText(getActivity(), "Error. Unable to upload result", Toast.LENGTH_SHORT).show();
+                                    builder.setMessage(R.string.save_error);
+                                    builder.setIcon(R.drawable.ic_warning);
                                 }
+                                builder.show();
                             }
                         });
                     }
@@ -384,7 +396,12 @@ public class NewcomerMapFragment extends Fragment {
                             if (isSuccessful) {
                                 returnToMapList();
                             } else {
-                                Toast.makeText(getActivity(), "Error. Unable to upload result", Toast.LENGTH_SHORT).show();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle(R.string.save_map);
+                                builder.setPositiveButton("OK",null);
+                                builder.setMessage(R.string.save_error);
+                                builder.setIcon(R.drawable.ic_warning);
+                                builder.show();
                             }
                         }
                     });
@@ -445,16 +462,16 @@ public class NewcomerMapFragment extends Fragment {
                         }
                     }
                 });
-
-                // Populate map with markers and store their reference
+                // Populate map with markers, set display info and store their reference
                 for (UserMarker userMarker : mNewcomerMap.getMarkers()) {
                     Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(
                                     userMarker.getLocation().getLatitude(),
                                     userMarker.getLocation().getLongitude()))
-                            .title(userMarker.getTitle())
-                            .snippet("Lat: " + userMarker.getLocation().getLatitude() +
-                                    " Lng: " + userMarker.getLocation().getLongitude()));
+                            .title(userMarker.getTitle()));
+                    if (userMarker.getDescription() != null && !userMarker.getDescription().isEmpty()) {
+                        mapMarker.setSnippet(userMarker.getDescription());
+                    }
                     mapMarker.setTag(userMarker);
                     userMarker.setOnContentChangeListener(onContentChangeListener);
                     mMarkerHashMap.put(userMarker, mapMarker);
@@ -483,16 +500,16 @@ public class NewcomerMapFragment extends Fragment {
         @Override
         public void onMapLongClick(LatLng latLng) {
             UserMarker userMarker = new UserMarker();
-            userMarker.setLocation(new GeoPoint(latLng.latitude, latLng.longitude));
             userMarker.setTitle("New Marker");
             showSetMarkerTitleDialog(userMarker);
+            userMarker.setLocation(new GeoPoint(latLng.latitude, latLng.longitude));
             mNewcomerMap.getMarkers().add(userMarker);
             Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(
                             userMarker.getLocation().getLatitude(),
                             userMarker.getLocation().getLongitude()))
                     .title(userMarker.getTitle()));
-            if (userMarker.getDescription() != null || !userMarker.getDescription().isEmpty()) {
+            if (userMarker.getDescription() != null && !userMarker.getDescription().isEmpty()) {
                 mapMarker.setSnippet(userMarker.getDescription());
             }
             mapMarker.setTag(userMarker);
