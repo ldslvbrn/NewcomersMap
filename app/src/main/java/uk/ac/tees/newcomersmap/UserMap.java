@@ -12,8 +12,9 @@ import java.util.function.UnaryOperator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class NewcomerMap {
+public class UserMap {
 
+    @Exclude
     private String documentId;
     private String title;
     private GeoPoint location;
@@ -21,17 +22,18 @@ public class NewcomerMap {
     @Exclude
     private OnContentChangeListener onContentChangeListener;
 
-    public NewcomerMap() {
+    public UserMap() {
         // No-args constructor required for Firestore db
     }
 
-    public NewcomerMap(String documentId, String title, GeoPoint location, List<UserMarker> markers) {
+    public UserMap(String documentId, String title, GeoPoint location, List<UserMarker> markers) {
         this.documentId = documentId;
         this.title = title;
         this.location = location;
         this.markers = markers;
     }
 
+    @Exclude
     public String getDocumentId() {
         return documentId;
     }
@@ -101,6 +103,10 @@ public class NewcomerMap {
         public OnChangeCallableArrayList(@NonNull Collection<? extends E> c) {
             super(c);
         }
+
+        // Technically speaking, notifying observers about a change before
+        // the change has happened is a bad programming practice and may lead to
+        // bugs. This should be avoided and more viable solution should be found in future.
 
         @Override
         public E set(int index, E element) {

@@ -45,7 +45,7 @@
 
     <fragment
         android:id="@+id/mapListFragment"
-        android:name="uk.ac.tees.newcomersmap.MapListFragment"
+        android:name="uk.ac.tees.newcomersmap.UserMapListFragment"
         android:label="fragment_map_list"
         tools:layout="@layout/fragment_map_list">
         <action
@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/newcomerMapFragment"
-        android:name="uk.ac.tees.newcomersmap.NewcomerMapFragment"
+        android:name="uk.ac.tees.newcomersmap.UserMapViewFragment"
         android:label="fragment_newcomer_map"
         tools:layout="@layout/fragment_newcomer_map" >
         <action

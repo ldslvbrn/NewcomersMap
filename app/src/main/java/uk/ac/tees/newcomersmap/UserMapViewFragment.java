@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,13 +41,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
-public class NewcomerMapFragment extends Fragment {
+public class UserMapViewFragment extends Fragment {
 
     public static final String EXTRA_MAP_LIST_INDEX =
             "uk.ac.tees.newcomersmap.EXTRA_MAP_LIST_INDEX";
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
-    private static final String TAG = "NewcomerMapFragment";
+    private static final String TAG = "UserMapViewFragment";
     private static int DEFAULT_ZOOM_LEVEL = 13;
 
     // View variables
@@ -60,8 +59,8 @@ public class NewcomerMapFragment extends Fragment {
     // Utils variables
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient mFusedLocationClient;
-    private NewcomerMapViewModel mViewModel;
-    private NewcomerMap mNewcomerMap;
+    private NewcomersMapViewModel mViewModel;
+    private UserMap mUserMap;
     private WeakHashMap<UserMarker, Marker> mMarkerHashMap = new WeakHashMap<>();
     private boolean mapValueChanged;
 
@@ -79,7 +78,7 @@ public class NewcomerMapFragment extends Fragment {
         if (savedInstanceState == null) {
             // Acquire ViewModel
             mViewModel = ViewModelProviders.of(getActivity())
-                    .get(NewcomerMapViewModel.class);
+                    .get(NewcomersMapViewModel.class);
 
             // Set-up ListView
             mListView = view.findViewById(R.id.listView_marker_list);
@@ -95,28 +94,28 @@ public class NewcomerMapFragment extends Fragment {
                 }
             });
 
-            // Get or create the NewcomerMap object instance
+            // Get or create the UserMap object instance
             if (getArguments() != null) {
-                mNewcomerMap = mViewModel
+                mUserMap = mViewModel
                         .getAllMaps()
                         .getValue()
                         .get(getArguments().getInt(EXTRA_MAP_LIST_INDEX));
-                mNewcomerMap.setOnContentChangeListener(onContentChangeListener);
+                mUserMap.setOnContentChangeListener(onContentChangeListener);
                 mapValueChanged = false;
-                mToolbar.setTitle(mNewcomerMap.getTitle());
+                mToolbar.setTitle(mUserMap.getTitle());
             } else {
-                mNewcomerMap = new NewcomerMap();
-                mNewcomerMap.setMarkers(new ArrayList<UserMarker>());
-                mNewcomerMap.setTitle(getString(R.string.new_map));
+                mUserMap = new UserMap();
+                mUserMap.setMarkers(new ArrayList<UserMarker>());
+                mUserMap.setTitle(getString(R.string.new_map));
                 mapValueChanged = true;
-                showSetMapTitleDialog(mNewcomerMap);
-                mToolbar.setTitle(mNewcomerMap.getTitle());
+                showSetMapTitleDialog(mUserMap);
+                mToolbar.setTitle(mUserMap.getTitle());
             }
 
             // Set-up list view and adapter
             registerForContextMenu(mListView);
             mListAdapter = new UserMarkerListAdapter(getActivity(),
-                    R.layout.item_user_marker, mNewcomerMap.getMarkers());
+                    R.layout.item_user_marker, mUserMap.getMarkers());
             mListAdapter.setGeocoder(new Geocoder(getActivity()));
             mListView.setOnItemClickListener(onItemClickListener);
             mListView.setAdapter(mListAdapter);
@@ -187,20 +186,20 @@ public class NewcomerMapFragment extends Fragment {
         int position = info.position;
         switch (item.getItemId()) {
             case R.id.option_item_edit_marker_title:
-                showSetMarkerTitleDialog(mNewcomerMap.getMarkers().get(position));
+                showSetMarkerTitleDialog(mUserMap.getMarkers().get(position));
                 return true;
 
             case R.id.option_item_edit_description:
-                showSetMarkerDescDialog(mNewcomerMap.getMarkers().get(position));
+                showSetMarkerDescDialog(mUserMap.getMarkers().get(position));
                 return true;
 
             case R.id.option_item_delete_marker:
-                UserMarker userMarker = mNewcomerMap.getMarkers().get(position);
+                UserMarker userMarker = mUserMap.getMarkers().get(position);
                 mMarkerHashMap.get(userMarker).remove();
                 mMarkerHashMap.remove(userMarker);
-                mNewcomerMap.getMarkers().remove(userMarker);
+                mUserMap.getMarkers().remove(userMarker);
                 mapValueChanged = true;
-                mNewcomerMap.removeOnContentChangeListener(onContentChangeListener);
+                mUserMap.removeOnContentChangeListener(onContentChangeListener);
                 mListAdapter.notifyDataSetChanged();
                 return true;
 
@@ -215,16 +214,16 @@ public class NewcomerMapFragment extends Fragment {
                 latLng, DEFAULT_ZOOM_LEVEL));
     }
 
-    private void showSetMapTitleDialog(NewcomerMap newcomerMap) {
+    private void showSetMapTitleDialog(UserMap userMap) {
         MapTitleDialogFragment mapTitleDialogFragment = new MapTitleDialogFragment();
-        mapTitleDialogFragment.setNewcomerMap(newcomerMap);
+        mapTitleDialogFragment.setNewcomerMap(userMap);
         mapTitleDialogFragment.setDialogListener(new DialogListener() {
             @Override
             public void onDialogResult(DialogResult dialogResult) {
                 if (dialogResult == DialogResult.INPUT_INVALID) {
                     Toast.makeText(getActivity(),
                             "The title must be in between 3-16 characters long", Toast.LENGTH_SHORT).show();
-                } else mToolbar.setTitle(mNewcomerMap.getTitle());
+                } else mToolbar.setTitle(mUserMap.getTitle());
             }
         });
         mapTitleDialogFragment.showNow(getActivity().getSupportFragmentManager(),
@@ -276,9 +275,9 @@ public class NewcomerMapFragment extends Fragment {
                 .navigate(R.id.action_newcomerMapFragment_to_mapListFragment);
     }
 
-    private void saveNewcomerMap(NewcomerMapViewModel.OnServiceResultListener onServiceResultListener) {
+    private void saveNewcomerMap(NewcomersMapViewModel.OnServiceResultListener onServiceResultListener) {
         // Validation checks
-        if (mNewcomerMap.getMarkers().isEmpty()) {
+        if (mUserMap.getMarkers().isEmpty()) {
             Toast.makeText(getActivity(),
                     "At least one marker placed is required.",
                     Toast.LENGTH_SHORT).show();
@@ -286,24 +285,24 @@ public class NewcomerMapFragment extends Fragment {
         }
         // Save data
         if (getArguments() != null) {
-            mViewModel.updateMap(mNewcomerMap, onServiceResultListener);
+            mViewModel.updateUserMap(mUserMap, onServiceResultListener);
         } else {
             // Name must be unique
-            for (NewcomerMap map : mViewModel.getAllMaps().getValue()) {
-                if (mNewcomerMap.getTitle().equals(map.getTitle())) {
+            for (UserMap map : mViewModel.getAllMaps().getValue()) {
+                if (mUserMap.getTitle().equals(map.getTitle())) {
                     Toast.makeText(getActivity(),
                             "A map with this name already exists.",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
-            mNewcomerMap.setLocation(mNewcomerMap.getMarkers().get(0).getLocation());
-            mViewModel.addMap(mNewcomerMap, onServiceResultListener);
+            mUserMap.setLocation(mUserMap.getMarkers().get(0).getLocation());
+            mViewModel.addUserMap(mUserMap, onServiceResultListener);
         }
     }
 
-    private void deleteNewcomerMap(NewcomerMapViewModel.OnServiceResultListener onServiceResultListener) {
-        mViewModel.deleteMap(mNewcomerMap, onServiceResultListener);
+    private void deleteNewcomerMap(NewcomersMapViewModel.OnServiceResultListener onServiceResultListener) {
+        mViewModel.deleteUserMap(mUserMap, onServiceResultListener);
     }
 
     private final OnBackPressedCallback onBackPressedCallback
@@ -329,7 +328,7 @@ public class NewcomerMapFragment extends Fragment {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        saveNewcomerMap(new NewcomerMapViewModel.OnServiceResultListener() {
+                        saveNewcomerMap(new NewcomersMapViewModel.OnServiceResultListener() {
                             @Override
                             public void OnResultCallback(Boolean isSuccessful) {
                                 if (isSuccessful) {
@@ -364,7 +363,7 @@ public class NewcomerMapFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.option_item_save_map:
                     if (mapValueChanged) {
-                        saveNewcomerMap(new NewcomerMapViewModel.OnServiceResultListener() {
+                        saveNewcomerMap(new NewcomersMapViewModel.OnServiceResultListener() {
                             @Override
                             public void OnResultCallback(Boolean isSuccessful) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -374,7 +373,7 @@ public class NewcomerMapFragment extends Fragment {
                                     builder.setMessage(R.string.save_success);
                                     builder.setIcon(R.drawable.ic_check);
                                     mapValueChanged = false;
-                                    mNewcomerMap.setOnContentChangeListener(onContentChangeListener);
+                                    mUserMap.setOnContentChangeListener(onContentChangeListener);
                                 } else {
                                     builder.setMessage(R.string.save_error);
                                     builder.setIcon(R.drawable.ic_warning);
@@ -386,11 +385,11 @@ public class NewcomerMapFragment extends Fragment {
                     return true;
 
                 case R.id.option_item_edit_map_title:
-                    showSetMapTitleDialog(mNewcomerMap);
+                    showSetMapTitleDialog(mUserMap);
                     return true;
 
                 case R.id.option_item_delete_map:
-                    deleteNewcomerMap(new NewcomerMapViewModel.OnServiceResultListener() {
+                    deleteNewcomerMap(new NewcomersMapViewModel.OnServiceResultListener() {
                         @Override
                         public void OnResultCallback(Boolean isSuccessful) {
                             if (isSuccessful) {
@@ -448,7 +447,7 @@ public class NewcomerMapFragment extends Fragment {
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful()) {
                             if (getArguments() != null) {
-                                GeoPoint geoPoint = mNewcomerMap.getLocation();
+                                GeoPoint geoPoint = mUserMap.getLocation();
                                 moveCamera(new LatLng(
                                         geoPoint.getLatitude(),
                                         geoPoint.getLongitude()));
@@ -463,7 +462,7 @@ public class NewcomerMapFragment extends Fragment {
                     }
                 });
                 // Populate map with markers, set display info and store their reference
-                for (UserMarker userMarker : mNewcomerMap.getMarkers()) {
+                for (UserMarker userMarker : mUserMap.getMarkers()) {
                     Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(
                                     userMarker.getLocation().getLatitude(),
@@ -489,7 +488,7 @@ public class NewcomerMapFragment extends Fragment {
             = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Marker mapMarker = mMarkerHashMap.get(mNewcomerMap.getMarkers().get(position));
+            Marker mapMarker = mMarkerHashMap.get(mUserMap.getMarkers().get(position));
             moveCamera(mapMarker.getPosition());
             mapMarker.showInfoWindow();
         }
@@ -503,7 +502,7 @@ public class NewcomerMapFragment extends Fragment {
             userMarker.setTitle("New Marker");
             showSetMarkerTitleDialog(userMarker);
             userMarker.setLocation(new GeoPoint(latLng.latitude, latLng.longitude));
-            mNewcomerMap.getMarkers().add(userMarker);
+            mUserMap.getMarkers().add(userMarker);
             Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(
                             userMarker.getLocation().getLatitude(),
@@ -522,20 +521,20 @@ public class NewcomerMapFragment extends Fragment {
             = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
-            int markerIndex = mNewcomerMap.getMarkers().indexOf(marker.getTag());
+            int markerIndex = mUserMap.getMarkers().indexOf(marker.getTag());
             mListView.smoothScrollToPosition(markerIndex);
             marker.showInfoWindow();
             return true;
         }
     };
 
-    private final NewcomerMap.OnContentChangeListener onContentChangeListener
-            = new NewcomerMap.OnContentChangeListener() {
+    private final UserMap.OnContentChangeListener onContentChangeListener
+            = new UserMap.OnContentChangeListener() {
         @Override
         public void onContentChange(boolean b) {
             mapValueChanged = b;
             if (b == true) {
-                mNewcomerMap.removeOnContentChangeListener(this);
+                mUserMap.removeOnContentChangeListener(this);
             }
         }
     };

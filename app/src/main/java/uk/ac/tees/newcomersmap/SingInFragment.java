@@ -86,7 +86,7 @@ public class SingInFragment extends Fragment {
 
             // Signed in successfully, show authenticated UI.
             Bundle bundle = new Bundle();
-            bundle.putParcelable(MapListFragment.EXTRA_GOOGLE_SIGN_IN_ACCOUNT,account);
+            bundle.putParcelable(UserMapListFragment.EXTRA_GOOGLE_SIGN_IN_ACCOUNT,account);
             Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
                     .navigate(R.id.action_singInFragment_to_mapListFragment, bundle);
 

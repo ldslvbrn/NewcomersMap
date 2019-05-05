@@ -4,30 +4,20 @@ import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 
 public class UserMarker {
-    private String documentId, title, description;
+    private String title;
+    private String description;
     private GeoPoint location;
     @Exclude
-    private NewcomerMap.OnContentChangeListener onContentChangeListener;
+    private UserMap.OnContentChangeListener onContentChangeListener;
 
     public UserMarker() {
         // No-args constructor required for Firestore db
     }
 
-    public UserMarker(String documentId, String title, String description, GeoPoint location) {
-        this.documentId = documentId;
+    public UserMarker(String title, String description, GeoPoint location) {
         this.title = title;
         this.description = description;
         this.location = location;
-    }
-
-    public String getDocumentId() {
-        return documentId;
-    }
-
-    @Exclude
-    public void setDocumentId(String documentId) {
-        this.documentId = documentId;
-        notifyObservers(true);
     }
 
     public String getTitle() {
@@ -58,12 +48,12 @@ public class UserMarker {
     }
 
     @Exclude
-    public void setOnContentChangeListener(NewcomerMap.OnContentChangeListener onContentChangeListener) {
+    public void setOnContentChangeListener(UserMap.OnContentChangeListener onContentChangeListener) {
         this.onContentChangeListener = onContentChangeListener;
     }
 
     @Exclude
-    public void removeOnContentChangeListener(NewcomerMap.OnContentChangeListener onContentChangeListener) {
+    public void removeOnContentChangeListener(UserMap.OnContentChangeListener onContentChangeListener) {
         if(this.onContentChangeListener == onContentChangeListener) {
             this.onContentChangeListener = null;
         }

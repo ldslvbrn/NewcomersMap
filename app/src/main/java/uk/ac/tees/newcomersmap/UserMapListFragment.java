@@ -30,19 +30,19 @@ import androidx.recyclerview.widget.RecyclerView;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapListFragment extends Fragment {
+public class UserMapListFragment extends Fragment {
 
-    public static final String TAG = "MapListFragment";
+    public static final String TAG = "UserMapListFragment";
     public static final String EXTRA_GOOGLE_SIGN_IN_ACCOUNT =
             "uk.ac.tees.newcomersmap.EXTRA_GOOGLE_SIGN_IN_ACCOUNT";
 
     private GoogleSignInAccount mGoogleSignInAccount;
     private ConstraintLayout loadingSpinnerView;
     private RecyclerView mapListRecyclerView;
-    private MapRecyclerAdapter adapter;
+    private UserMapRecyclerAdapter adapter;
     private FloatingActionButton addButton;
     private Toolbar mToolbar;
-    private NewcomerMapViewModel viewModel;
+    private NewcomersMapViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,12 +69,12 @@ public class MapListFragment extends Fragment {
         mapListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mapListRecyclerView.setHasFixedSize(true);
 
-        adapter = new MapRecyclerAdapter(new Geocoder(getActivity()));
-        adapter.setOnItemClickListener(new MapRecyclerAdapter.OnItemClickListener() {
+        adapter = new UserMapRecyclerAdapter(new Geocoder(getActivity()));
+        adapter.setOnItemClickListener(new UserMapRecyclerAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(NewcomerMap map) {
+            public void onItemClick(UserMap map) {
                 Bundle bundle = new Bundle();
-                bundle.putInt(NewcomerMapFragment.EXTRA_MAP_LIST_INDEX,
+                bundle.putInt(UserMapViewFragment.EXTRA_MAP_LIST_INDEX,
                         viewModel.getAllMaps().getValue().indexOf(map));
 
                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment)
@@ -91,11 +91,11 @@ public class MapListFragment extends Fragment {
         super.onStart();
         // Acquire ViewModel
         viewModel = ViewModelProviders.of(getActivity())
-                .get(NewcomerMapViewModel.class);
+                .get(NewcomersMapViewModel.class);
         // Observe ViewModel
-        viewModel.getAllMaps().observe(getActivity(), new Observer<List<NewcomerMap>>() {
+        viewModel.getAllMaps().observe(getActivity(), new Observer<List<UserMap>>() {
             @Override
-            public void onChanged(List<NewcomerMap> maps) {
+            public void onChanged(List<UserMap> maps) {
                 adapter.setMaps(maps);
             }
         });
@@ -160,8 +160,8 @@ public class MapListFragment extends Fragment {
         }
     };
 
-    private final NewcomerMapViewModel.OnServiceResultListener onAuthenticateResultListener
-            = new NewcomerMapViewModel.OnServiceResultListener() {
+    private final NewcomersMapViewModel.OnServiceResultListener onAuthenticateResultListener
+            = new NewcomersMapViewModel.OnServiceResultListener() {
         @Override
         public void OnResultCallback(Boolean isSuccessful) {
             if (isSuccessful) {
@@ -177,8 +177,8 @@ public class MapListFragment extends Fragment {
             }
         }
     };
-    private final NewcomerMapViewModel.OnServiceResultListener onRetrieveDataResultListener
-            = new NewcomerMapViewModel.OnServiceResultListener() {
+    private final NewcomersMapViewModel.OnServiceResultListener onRetrieveDataResultListener
+            = new NewcomersMapViewModel.OnServiceResultListener() {
         @Override
         public void OnResultCallback(Boolean isSuccessful) {
             if (isSuccessful) {

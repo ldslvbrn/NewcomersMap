@@ -14,13 +14,13 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.MapHolder> {
+public class UserMapRecyclerAdapter extends RecyclerView.Adapter<UserMapRecyclerAdapter.MapHolder> {
 
-    private List<NewcomerMap> maps = new ArrayList<>();
+    private List<UserMap> maps = new ArrayList<>();
     private Geocoder geocoder;
     private OnItemClickListener onItemClickListener;
 
-    public MapRecyclerAdapter(Geocoder geocoder) {
+    public UserMapRecyclerAdapter(Geocoder geocoder) {
         super();
         this.geocoder = geocoder;
     }
@@ -35,7 +35,7 @@ public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MapHolder holder, int position) {
-        NewcomerMap currentMap = maps.get(position);
+        UserMap currentMap = maps.get(position);
         holder.textViewTitle.setText(currentMap.getTitle());
         int markerCount = maps.get(position).getMarkers().size();
         holder.textViewMarkers.setText(String.valueOf(markerCount));
@@ -61,7 +61,7 @@ public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.
         return maps.size();
     }
 
-    public void setMaps(List<NewcomerMap> maps) {
+    public void setMaps(List<UserMap> maps) {
         this.maps = maps;
         notifyDataSetChanged();
     }
@@ -95,6 +95,6 @@ public class MapRecyclerAdapter extends RecyclerView.Adapter<MapRecyclerAdapter.
     }
 
     protected interface OnItemClickListener {
-        void onItemClick(NewcomerMap map);
+        void onItemClick(UserMap map);
     }
 }

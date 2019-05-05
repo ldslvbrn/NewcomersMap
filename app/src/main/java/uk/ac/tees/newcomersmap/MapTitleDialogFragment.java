@@ -17,7 +17,7 @@ public class MapTitleDialogFragment extends DialogFragment {
 
     private EditText editTextMapTitle;
     private DialogListener dialogListener;
-    private NewcomerMap mNewcomerMap;
+    private UserMap mUserMap;
 
     @NonNull
     @Override
@@ -28,7 +28,7 @@ public class MapTitleDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_change_map_title, null);
 
         editTextMapTitle = view.findViewById(R.id.edit_map_title);
-        editTextMapTitle.setText(mNewcomerMap.getTitle());
+        editTextMapTitle.setText(mUserMap.getTitle());
         editTextMapTitle.selectAll();
         builder.setView(view)
                 .setTitle("Map:")
@@ -49,7 +49,7 @@ public class MapTitleDialogFragment extends DialogFragment {
                             if (title.isEmpty() || title.length() < 3 || title.length() > 16) {
                                 dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
                             } else {
-                                mNewcomerMap.setTitle(title);
+                                mUserMap.setTitle(title);
                                 dialogListener.onDialogResult(DialogResult.INPUT_OK);
                             }
                         }
@@ -65,8 +65,8 @@ public class MapTitleDialogFragment extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    public void setNewcomerMap(NewcomerMap mNewcomerMap) {
-        this.mNewcomerMap = mNewcomerMap;
+    public void setNewcomerMap(UserMap mUserMap) {
+        this.mUserMap = mUserMap;
     }
 
     public void setDialogListener(DialogListener dialogListener) {
