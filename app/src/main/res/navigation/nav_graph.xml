@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/singInFragment"
-        android:name="uk.ac.tees.newcomersmap.SingInFragment"
+        android:name="uk.ac.tees.java.newcomersmap.SingInFragment"
         android:label="fragment_sing_in"
         tools:layout="@layout/fragment_sing_in">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/titleScreenFragment"
-        android:name="uk.ac.tees.newcomersmap.TitleScreenFragment"
+        android:name="uk.ac.tees.java.newcomersmap.TitleScreenFragment"
         android:label="fragment_title_screen"
         tools:layout="@layout/fragment_title_screen">
         <action
@@ -39,13 +39,13 @@
 
     <fragment
         android:id="@+id/errorFragment"
-        android:name="uk.ac.tees.newcomersmap.ErrorFragment"
+        android:name="uk.ac.tees.java.newcomersmap.ErrorFragment"
         android:label="fragment_error"
         tools:layout="@layout/fragment_error" />
 
     <fragment
         android:id="@+id/mapListFragment"
-        android:name="uk.ac.tees.newcomersmap.UserMapListFragment"
+        android:name="uk.ac.tees.java.newcomersmap.UserMapListFragment"
         android:label="fragment_map_list"
         tools:layout="@layout/fragment_map_list">
         <action
@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/newcomerMapFragment"
-        android:name="uk.ac.tees.newcomersmap.UserMapViewFragment"
+        android:name="uk.ac.tees.java.newcomersmap.UserMapViewFragment"
         android:label="fragment_newcomer_map"
         tools:layout="@layout/fragment_newcomer_map" >
         <action

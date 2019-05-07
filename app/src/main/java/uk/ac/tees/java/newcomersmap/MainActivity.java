@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.java.newcomersmap;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -7,11 +7,8 @@ import android.os.Bundle;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
 

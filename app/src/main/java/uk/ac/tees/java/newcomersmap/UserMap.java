@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.java.newcomersmap;
 
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;

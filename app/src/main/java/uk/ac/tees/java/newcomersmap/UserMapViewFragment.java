@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.java.newcomersmap;
 
 import android.Manifest;
 import android.content.Context;
@@ -44,7 +44,7 @@ import androidx.navigation.Navigation;
 public class UserMapViewFragment extends Fragment {
 
     public static final String EXTRA_MAP_LIST_INDEX =
-            "uk.ac.tees.newcomersmap.EXTRA_MAP_LIST_INDEX";
+            "uk.ac.tees.java.newcomersmap.EXTRA_MAP_LIST_INDEX";
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private static final String TAG = "UserMapViewFragment";

@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.java.newcomersmap;
 
 
 import android.location.Geocoder;
@@ -34,7 +34,7 @@ public class UserMapListFragment extends Fragment {
 
     public static final String TAG = "UserMapListFragment";
     public static final String EXTRA_GOOGLE_SIGN_IN_ACCOUNT =
-            "uk.ac.tees.newcomersmap.EXTRA_GOOGLE_SIGN_IN_ACCOUNT";
+            "uk.ac.tees.java.newcomersmap.EXTRA_GOOGLE_SIGN_IN_ACCOUNT";
 
     private GoogleSignInAccount mGoogleSignInAccount;
     private ConstraintLayout loadingSpinnerView;

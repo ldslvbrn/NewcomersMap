@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.java.newcomersmap;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

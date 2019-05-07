@@ -1,4 +1,4 @@
-package uk.ac.tees.newcomersmap;
+package uk.ac.tees.java.newcomersmap;
 
 
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 public class ErrorFragment extends Fragment {
 
     public static final String EXTRA_ERROR_CODE =
-            "uk.ac.tees.newcomersmap.EXTRA_ERROR";
+            "uk.ac.tees.java.newcomersmap.EXTRA_ERROR";
     public static final int PERMISSION_ERROR_CODE = 9001;
     public static final int FIRESTORE_ERROR_CODE = 9002;
 
