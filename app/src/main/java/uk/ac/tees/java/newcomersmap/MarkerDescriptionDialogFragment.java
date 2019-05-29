@@ -17,7 +17,7 @@ public class MarkerDescriptionDialogFragment extends DialogFragment {
 
     private EditText editTextMarkerDesc;
     private DialogListener dialogListener;
-    private UserMarker mUserMarker;
+    private UserPoint mUserPoint;
 
     @NonNull
     @Override
@@ -28,8 +28,8 @@ public class MarkerDescriptionDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_change_marker_description, null);
 
         editTextMarkerDesc = view.findViewById(R.id.edit_marker_description);
-        if (mUserMarker.getDescription() != null) {
-            editTextMarkerDesc.setText(mUserMarker.getDescription());
+        if (mUserPoint.getDescription() != null) {
+            editTextMarkerDesc.setText(mUserPoint.getDescription());
         }
         editTextMarkerDesc.selectAll();
         builder.setView(view)
@@ -51,12 +51,12 @@ public class MarkerDescriptionDialogFragment extends DialogFragment {
                                     || !editTextMarkerDesc.getText().toString().isEmpty()) {
                                 String desc = editTextMarkerDesc.getText().toString().trim();
                                 if (desc == null) {
-                                    mUserMarker.setDescription(null);
+                                    mUserPoint.setDescription(null);
                                 }
                                 if (desc.length() > 40) {
                                     dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
                                 } else {
-                                    mUserMarker.setDescription(desc);
+                                    mUserPoint.setDescription(desc);
                                     dialogListener.onDialogResult(DialogResult.INPUT_OK);
                                 }
                             } else  dialogListener.onDialogResult(DialogResult.INPUT_OK);
@@ -73,8 +73,8 @@ public class MarkerDescriptionDialogFragment extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    public void setUserMarker(UserMarker mUserMarker) {
-        this.mUserMarker = mUserMarker;
+    public void setUserMarker(UserPoint mUserPoint) {
+        this.mUserPoint = mUserPoint;
     }
 
     public void setDialogListener(DialogListener dialogListener) {

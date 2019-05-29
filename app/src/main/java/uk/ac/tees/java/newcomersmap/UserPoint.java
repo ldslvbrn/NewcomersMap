@@ -3,18 +3,18 @@ package uk.ac.tees.java.newcomersmap;
 import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.GeoPoint;
 
-public class UserMarker {
+public class UserPoint {
     private String title;
     private String description;
     private GeoPoint location;
     @Exclude
     private UserMap.OnContentChangeListener onContentChangeListener;
 
-    public UserMarker() {
+    public UserPoint() {
         // No-args constructor required for Firestore db
     }
 
-    public UserMarker(String title, String description, GeoPoint location) {
+    public UserPoint(String title, String description, GeoPoint location) {
         this.title = title;
         this.description = description;
         this.location = location;

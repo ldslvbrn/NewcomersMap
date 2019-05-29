@@ -18,7 +18,7 @@ public class UserMap {
     private String documentId;
     private String title;
     private GeoPoint location;
-    private List<UserMarker> markers;
+    private List<UserPoint> points;
     @Exclude
     private OnContentChangeListener onContentChangeListener;
 
@@ -26,11 +26,11 @@ public class UserMap {
         // No-args constructor required for Firestore db
     }
 
-    public UserMap(String documentId, String title, GeoPoint location, List<UserMarker> markers) {
+    public UserMap(String documentId, String title, GeoPoint location, List<UserPoint> points) {
         this.documentId = documentId;
         this.title = title;
         this.location = location;
-        this.markers = markers;
+        this.points = points;
     }
 
     @Exclude
@@ -62,13 +62,13 @@ public class UserMap {
         notifyObservers(true);
     }
 
-    public List<UserMarker> getMarkers() {
-        return markers;
+    public List<UserPoint> getPoints() {
+        return points;
     }
 
-    public void setMarkers(List<UserMarker> markers) {
+    public void setPoints(List<UserPoint> points) {
 
-        this.markers = new OnChangeCallableArrayList<>(markers);
+        this.points = new OnChangeCallableArrayList<>(points);
         notifyObservers(true);
     }
 
@@ -81,7 +81,7 @@ public class UserMap {
     public void removeOnContentChangeListener(OnContentChangeListener onContentChangeListener) {
         if(this.onContentChangeListener == onContentChangeListener) {
             this.onContentChangeListener = null;
-            for(UserMarker marker : markers) {
+            for(UserPoint marker : points) {
                 marker.removeOnContentChangeListener(onContentChangeListener);
             }
         }

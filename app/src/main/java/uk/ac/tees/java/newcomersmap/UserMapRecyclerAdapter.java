@@ -37,7 +37,7 @@ public class UserMapRecyclerAdapter extends RecyclerView.Adapter<UserMapRecycler
     public void onBindViewHolder(@NonNull MapHolder holder, int position) {
         UserMap currentMap = maps.get(position);
         holder.textViewTitle.setText(currentMap.getTitle());
-        int markerCount = maps.get(position).getMarkers().size();
+        int markerCount = maps.get(position).getPoints().size();
         holder.textViewMarkers.setText(String.valueOf(markerCount));
 
        // Use Geocoder and locate nearest address

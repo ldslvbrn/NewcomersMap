@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:labelFor="@+id/textView_markers"
-        android:text="@string/markers"
+        android:text="@string/points"
         app:layout_constraintBottom_toTopOf="@+id/textView_markers"
         app:layout_constraintEnd_toEndOf="parent" />
 

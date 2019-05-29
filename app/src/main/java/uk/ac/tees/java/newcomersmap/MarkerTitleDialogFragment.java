@@ -17,7 +17,7 @@ public class MarkerTitleDialogFragment extends DialogFragment {
 
     private EditText editTextMarkerTitle;
     private DialogListener dialogListener;
-    private UserMarker mUserMarker;
+    private UserPoint mUserPoint;
 
     @NonNull
     @Override
@@ -28,7 +28,7 @@ public class MarkerTitleDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_change_marker_title, null);
 
         editTextMarkerTitle = view.findViewById(R.id.edit_marker_description);
-        editTextMarkerTitle.setText(mUserMarker.getTitle());
+        editTextMarkerTitle.setText(mUserPoint.getTitle());
         editTextMarkerTitle.selectAll();
         builder.setView(view)
                 .setTitle("Marker:")
@@ -49,7 +49,7 @@ public class MarkerTitleDialogFragment extends DialogFragment {
                             if (title.isEmpty() || title.length() < 3 || title.length() > 16) {
                                 dialogListener.onDialogResult(DialogResult.INPUT_INVALID);
                             } else {
-                                mUserMarker.setTitle(title);
+                                mUserPoint.setTitle(title);
                                 dialogListener.onDialogResult(DialogResult.INPUT_OK);
                             }
                         }
@@ -65,8 +65,8 @@ public class MarkerTitleDialogFragment extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
-    public void setUserMarker(UserMarker mUserMarker) {
-        this.mUserMarker = mUserMarker;
+    public void setUserMarker(UserPoint mUserPoint) {
+        this.mUserPoint = mUserPoint;
     }
 
     public void setDialogListener(DialogListener dialogListener) {

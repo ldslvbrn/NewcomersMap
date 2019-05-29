@@ -9,7 +9,7 @@
     <string name="default_error_message">"Unregistered error"</string>
     <string name="error_word">Error</string>
     <string name="loading_your_maps">Loading your maps. . .</string>
-    <string name="markers">Markers:</string>
+    <string name="points">Points:</string>
     <string name="title">Title:</string>
     <string name="location">Location:</string>
     <string name="edit_word">Edit</string>
@@ -18,8 +18,8 @@
     <string name="map_title_hint">Map Title…</string>
     <string name="edit_title">Edit Title</string>
     <string name="edit_description">Edit Description</string>
-    <string name="delete_marker">Delete Marker</string>
-    <string name="new_marker">New Marker</string>
+    <string name="delete_point">Delete Point</string>
+    <string name="new_point">New Point</string>
     <string name="new_map">New Map</string>
     <string name="unsaved_changes_title">Unsaved Changes</string>
     <string name="unsaved_changes_message">Would you like to save your changes?</string>
@@ -30,8 +30,8 @@
     <string name="sign_out">Sign out</string>
     <string name="public_maps">Public Maps</string>
     <string name="coming_soon">Feature coming soon!...</string>
-    <string name="marker_description_hint">Brief place description...</string>
-    <string name="marker_title_hint">Marker title...</string>
+    <string name="point_description_hint">Brief place description...</string>
+    <string name="point_title_hint">Point title...</string>
     <string name="save_success">Map saved successfully</string>
     <string name="save_error">Error. Unable to upload changes</string>
 

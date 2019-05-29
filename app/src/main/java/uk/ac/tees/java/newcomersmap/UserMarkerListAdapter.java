@@ -15,7 +15,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class UserMarkerListAdapter extends ArrayAdapter<UserMarker> {
+public class UserMarkerListAdapter extends ArrayAdapter<UserPoint> {
 
     public static final String TAG = "UserMarkerListAdapter";
     private final int resource;
@@ -23,7 +23,7 @@ public class UserMarkerListAdapter extends ArrayAdapter<UserMarker> {
     private Context context;
     private Geocoder geocoder;
 
-    public UserMarkerListAdapter(@NonNull Context context, int resource, @NonNull List<UserMarker> objects) {
+    public UserMarkerListAdapter(@NonNull Context context, int resource, @NonNull List<UserPoint> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -38,7 +38,7 @@ public class UserMarkerListAdapter extends ArrayAdapter<UserMarker> {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        UserMarker currentMarker = getItem(position);
+        UserPoint currentMarker = getItem(position);
 
         // Use Geocoder and reverse-geolocate nearest address
         String location;

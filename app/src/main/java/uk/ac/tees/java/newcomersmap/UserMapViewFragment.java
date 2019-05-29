@@ -61,8 +61,10 @@ public class UserMapViewFragment extends Fragment {
     private FusedLocationProviderClient mFusedLocationClient;
     private NewcomersMapViewModel mViewModel;
     private UserMap mUserMap;
-    private WeakHashMap<UserMarker, Marker> mMarkerHashMap = new WeakHashMap<>();
+    private WeakHashMap<UserPoint, Marker> mMarkerHashMap = new WeakHashMap<>();
     private boolean mapValueChanged;
+
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -105,7 +107,7 @@ public class UserMapViewFragment extends Fragment {
                 mToolbar.setTitle(mUserMap.getTitle());
             } else {
                 mUserMap = new UserMap();
-                mUserMap.setMarkers(new ArrayList<UserMarker>());
+                mUserMap.setPoints(new ArrayList<UserPoint>());
                 mUserMap.setTitle(getString(R.string.new_map));
                 mapValueChanged = true;
                 showSetMapTitleDialog(mUserMap);
@@ -115,7 +117,7 @@ public class UserMapViewFragment extends Fragment {
             // Set-up list view and adapter
             registerForContextMenu(mListView);
             mListAdapter = new UserMarkerListAdapter(getActivity(),
-                    R.layout.item_user_marker, mUserMap.getMarkers());
+                    R.layout.item_user_marker, mUserMap.getPoints());
             mListAdapter.setGeocoder(new Geocoder(getActivity()));
             mListView.setOnItemClickListener(onItemClickListener);
             mListView.setAdapter(mListAdapter);
@@ -186,18 +188,18 @@ public class UserMapViewFragment extends Fragment {
         int position = info.position;
         switch (item.getItemId()) {
             case R.id.option_item_edit_marker_title:
-                showSetMarkerTitleDialog(mUserMap.getMarkers().get(position));
+                showSetMarkerTitleDialog(mUserMap.getPoints().get(position));
                 return true;
 
             case R.id.option_item_edit_description:
-                showSetMarkerDescDialog(mUserMap.getMarkers().get(position));
+                showSetMarkerDescDialog(mUserMap.getPoints().get(position));
                 return true;
 
             case R.id.option_item_delete_marker:
-                UserMarker userMarker = mUserMap.getMarkers().get(position);
-                mMarkerHashMap.get(userMarker).remove();
-                mMarkerHashMap.remove(userMarker);
-                mUserMap.getMarkers().remove(userMarker);
+                UserPoint userPoint = mUserMap.getPoints().get(position);
+                mMarkerHashMap.get(userPoint).remove();
+                mMarkerHashMap.remove(userPoint);
+                mUserMap.getPoints().remove(userPoint);
                 mapValueChanged = true;
                 mUserMap.removeOnContentChangeListener(onContentChangeListener);
                 mListAdapter.notifyDataSetChanged();
@@ -230,7 +232,7 @@ public class UserMapViewFragment extends Fragment {
                 "Set Title Dialog");
     }
 
-    private void showSetMarkerTitleDialog(final UserMarker marker) {
+    private void showSetMarkerTitleDialog(final UserPoint marker) {
         MarkerTitleDialogFragment markerTitleDialogFragment = new MarkerTitleDialogFragment();
         markerTitleDialogFragment.setUserMarker(marker);
         markerTitleDialogFragment.setDialogListener(new DialogListener() {
@@ -246,7 +248,7 @@ public class UserMapViewFragment extends Fragment {
                 "Set Title Dialog");
     }
 
-    private void  showSetMarkerDescDialog(final UserMarker marker) {
+    private void  showSetMarkerDescDialog(final UserPoint marker) {
         MarkerDescriptionDialogFragment markerDescriptionDialogFragment
                 = new MarkerDescriptionDialogFragment();
         markerDescriptionDialogFragment.setUserMarker(marker);
@@ -277,7 +279,7 @@ public class UserMapViewFragment extends Fragment {
 
     private void saveNewcomerMap(NewcomersMapViewModel.OnServiceResultListener onServiceResultListener) {
         // Validation checks
-        if (mUserMap.getMarkers().isEmpty()) {
+        if (mUserMap.getPoints().isEmpty()) {
             Toast.makeText(getActivity(),
                     "At least one marker placed is required.",
                     Toast.LENGTH_SHORT).show();
@@ -296,7 +298,7 @@ public class UserMapViewFragment extends Fragment {
                     return;
                 }
             }
-            mUserMap.setLocation(mUserMap.getMarkers().get(0).getLocation());
+            mUserMap.setLocation(mUserMap.getPoints().get(0).getLocation());
             mViewModel.addUserMap(mUserMap, onServiceResultListener);
         }
     }
@@ -304,6 +306,8 @@ public class UserMapViewFragment extends Fragment {
     private void deleteNewcomerMap(NewcomersMapViewModel.OnServiceResultListener onServiceResultListener) {
         mViewModel.deleteUserMap(mUserMap, onServiceResultListener);
     }
+
+
 
     private final OnBackPressedCallback onBackPressedCallback
             = new OnBackPressedCallback() {
@@ -462,18 +466,18 @@ public class UserMapViewFragment extends Fragment {
                     }
                 });
                 // Populate map with markers, set display info and store their reference
-                for (UserMarker userMarker : mUserMap.getMarkers()) {
+                for (UserPoint userPoint : mUserMap.getPoints()) {
                     Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(
-                                    userMarker.getLocation().getLatitude(),
-                                    userMarker.getLocation().getLongitude()))
-                            .title(userMarker.getTitle()));
-                    if (userMarker.getDescription() != null && !userMarker.getDescription().isEmpty()) {
-                        mapMarker.setSnippet(userMarker.getDescription());
+                                    userPoint.getLocation().getLatitude(),
+                                    userPoint.getLocation().getLongitude()))
+                            .title(userPoint.getTitle()));
+                    if (userPoint.getDescription() != null && !userPoint.getDescription().isEmpty()) {
+                        mapMarker.setSnippet(userPoint.getDescription());
                     }
-                    mapMarker.setTag(userMarker);
-                    userMarker.setOnContentChangeListener(onContentChangeListener);
-                    mMarkerHashMap.put(userMarker, mapMarker);
+                    mapMarker.setTag(userPoint);
+                    userPoint.setOnContentChangeListener(onContentChangeListener);
+                    mMarkerHashMap.put(userPoint, mapMarker);
                 }
                 mListAdapter.notifyDataSetChanged();
                 // Set on MAP HOLD Listener
@@ -488,7 +492,7 @@ public class UserMapViewFragment extends Fragment {
             = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Marker mapMarker = mMarkerHashMap.get(mUserMap.getMarkers().get(position));
+            Marker mapMarker = mMarkerHashMap.get(mUserMap.getPoints().get(position));
             moveCamera(mapMarker.getPosition());
             mapMarker.showInfoWindow();
         }
@@ -498,21 +502,21 @@ public class UserMapViewFragment extends Fragment {
             = new GoogleMap.OnMapLongClickListener() {
         @Override
         public void onMapLongClick(LatLng latLng) {
-            UserMarker userMarker = new UserMarker();
-            userMarker.setTitle("New Marker");
-            showSetMarkerTitleDialog(userMarker);
-            userMarker.setLocation(new GeoPoint(latLng.latitude, latLng.longitude));
-            mUserMap.getMarkers().add(userMarker);
+            UserPoint userPoint = new UserPoint();
+            userPoint.setTitle("New Marker");
+            showSetMarkerTitleDialog(userPoint);
+            userPoint.setLocation(new GeoPoint(latLng.latitude, latLng.longitude));
+            mUserMap.getPoints().add(userPoint);
             Marker mapMarker = mGoogleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(
-                            userMarker.getLocation().getLatitude(),
-                            userMarker.getLocation().getLongitude()))
-                    .title(userMarker.getTitle()));
-            if (userMarker.getDescription() != null && !userMarker.getDescription().isEmpty()) {
-                mapMarker.setSnippet(userMarker.getDescription());
+                            userPoint.getLocation().getLatitude(),
+                            userPoint.getLocation().getLongitude()))
+                    .title(userPoint.getTitle()));
+            if (userPoint.getDescription() != null && !userPoint.getDescription().isEmpty()) {
+                mapMarker.setSnippet(userPoint.getDescription());
             }
-            mapMarker.setTag(userMarker);
-            mMarkerHashMap.put(userMarker, mapMarker);
+            mapMarker.setTag(userPoint);
+            mMarkerHashMap.put(userPoint, mapMarker);
             mListAdapter.notifyDataSetChanged();
         }
     };
@@ -521,7 +525,7 @@ public class UserMapViewFragment extends Fragment {
             = new GoogleMap.OnMarkerClickListener() {
         @Override
         public boolean onMarkerClick(Marker marker) {
-            int markerIndex = mUserMap.getMarkers().indexOf(marker.getTag());
+            int markerIndex = mUserMap.getPoints().indexOf(marker.getTag());
             mListView.smoothScrollToPosition(markerIndex);
             marker.showInfoWindow();
             return true;
